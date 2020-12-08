@@ -1,0 +1,5 @@
+bitbag:
+    ui:
+        label: Name
+        api_key: API key
+        api_secret: API secret
