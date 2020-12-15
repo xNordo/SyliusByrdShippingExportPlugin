@@ -41,7 +41,7 @@ final class ShippingExportEventListener
             return;
         }
 
-//        $exportShipmentEvent->addSuccessFlash();
-//        $exportShipmentEvent->exportShipment();
+        $exportShipmentEvent->addSuccessFlash();
+        $exportShipmentEvent->exportShipment();
     }
 }
