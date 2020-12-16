@@ -13,16 +13,24 @@ declare(strict_types=1);
 namespace BitBag\SyliusByrdShippingExportPlugin\EventListener;
 
 use BitBag\SyliusByrdShippingExportPlugin\Api\Client\ByrdHttpClientInterface;
+use BitBag\SyliusByrdShippingExportPlugin\Api\Exception\ByrdApiException;
 use BitBag\SyliusShippingExportPlugin\Event\ExportShipmentEvent;
+use Doctrine\ORM\EntityManagerInterface;
 
 final class ShippingExportEventListener
 {
     /** @var ByrdHttpClientInterface */
     private $byrdHttpClient;
 
-    public function __construct(ByrdHttpClientInterface $byrdHttpClient)
-    {
+    /** @var EntityManagerInterface */
+    private $entityManager;
+
+    public function __construct(
+        ByrdHttpClientInterface $byrdHttpClient,
+        EntityManagerInterface $entityManager
+    ) {
         $this->byrdHttpClient = $byrdHttpClient;
+        $this->entityManager = $entityManager;
     }
 
     public function exportShipment(ExportShipmentEvent $exportShipmentEvent): void
@@ -34,7 +42,10 @@ final class ShippingExportEventListener
 
         try {
             $this->byrdHttpClient->createShipment($order, $shipmentGateway);
-        } catch (\Exception $e) {
+        } catch (ByrdApiException $e) {
+            $exportShipmentEvent->getShippingExport()->setState('failed');
+            $this->entityManager->flush();
+
             $exportShipmentEvent->addErrorFlash(
                 sprintf("Byrd error for order %s: %s", $order->getNumber(), $e->getMessage())
             );

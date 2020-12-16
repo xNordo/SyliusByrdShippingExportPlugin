@@ -3,12 +3,28 @@
 <container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
         <service id="bitbag.byrd_shipping_export_plugin.api.byrd_http_client" class="BitBag\SyliusByrdShippingExportPlugin\Api\Client\ByrdHttpClient">
+            <argument type="service" id="bitbag.byrd_shipping_export_plugin.api.byrd_request.generate_token" />
+            <argument type="service" id="bitbag.byrd_shipping_export_plugin.api.byrd_request.create_shipment" />
+        </service>
+
+        <service id="bitbag.byrd_shipping_export_plugin.api.byrd_model_factory" class="BitBag\SyliusByrdShippingExportPlugin\Api\Factory\ByrdModelFactory" />
+
+        <service id="bitbag.byrd_shipping_export_plugin.api.byrd_request.generate_token" class="BitBag\SyliusByrdShippingExportPlugin\Api\ByrdRequest\GenerateTokenByrdRequest">
+            <argument type="service" id="http_client" />
+            <argument type="string">%env(BYRD_API_URL)%</argument>
+        </service>
+
+        <service id="bitbag.byrd_shipping_export_plugin.api.byrd_request.create_shipment" class="BitBag\SyliusByrdShippingExportPlugin\Api\ByrdRequest\CreateShipmentByrdRequest">
             <argument type="service" id="http_client" />
             <argument type="service" id="bitbag.byrd_shipping_export_plugin.repository.byrd_product_mapping" />
+            <argument type="service" id="bitbag.byrd_shipping_export_plugin.api.byrd_request.find_product" />
             <argument type="service" id="bitbag.byrd_shipping_export_plugin.api.byrd_model_factory" />
             <argument type="string">%env(BYRD_API_URL)%</argument>
         </service>
 
-        <service id="bitbag.byrd_shipping_export_plugin.api.byrd_model_factory" class="BitBag\SyliusByrdShippingExportPlugin\Api\Factory\ByrdModelFactory" />
+        <service id="bitbag.byrd_shipping_export_plugin.api.byrd_request.find_product" class="BitBag\SyliusByrdShippingExportPlugin\Api\ByrdRequest\FindProductByrdRequest">
+            <argument type="service" id="http_client" />
+            <argument type="string">%env(BYRD_API_URL)%</argument>
+        </service>
     </services>
 </container>

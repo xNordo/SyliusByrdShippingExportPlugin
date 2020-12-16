@@ -1,0 +1,9 @@
+{% set value = 'bitbag.ui.' ~ data.state %}
+
+{% if  data.state == 'new' %}
+    {% include '@BitBagSyliusShippingExportPlugin/ShippingExport/Partial/_exportShipment.html.twig' %}
+{% elseif data.state == 'failed' %}
+    <span class="shipping-export-state ui red label"><i class="x icon"></i> {{ value|trans }}</span>
+{% else %}
+    <span class="shipping-export-state ui green label"><i class="check icon"></i> {{ value|trans }}</span>
+{% endif %}

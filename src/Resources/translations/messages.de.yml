@@ -9,3 +9,7 @@ bitbag_sylius_byrd_shipping_export_plugin:
         label: Name
         api_key: API-Schlüssel
         api_secret: API-Geheimnis
+
+bitbag:
+    ui:
+        failed: Gescheitert

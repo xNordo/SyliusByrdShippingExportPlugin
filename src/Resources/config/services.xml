@@ -11,6 +11,7 @@
 
         <service id="bitbag.byrd_shipping_export_plugin.event_listener.byrd_shipping_export" class="BitBag\SyliusByrdShippingExportPlugin\EventListener\ShippingExportEventListener">
             <argument type="service" id="bitbag.byrd_shipping_export_plugin.api.byrd_http_client" />
+            <argument type="service" id="doctrine.orm.entity_manager" />
 
             <tag name="kernel.event_listener" event="bitbag.export_shipment" method="exportShipment" />
         </service>
