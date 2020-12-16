@@ -1,0 +1,3 @@
+imports:
+  - { resource: "@BitBagByrdShippingExportPlugin/Resources/config/grids.yaml" }
+  - { resource: "@BitBagByrdShippingExportPlugin/Resources/config/resources.yaml" }

@@ -12,6 +12,10 @@ declare(strict_types=1);
 
 namespace BitBag\SyliusByrdShippingExportPlugin\Api\Client;
 
+use BitBag\SyliusByrdShippingExportPlugin\Api\Factory\ByrdModelFactoryInterface;
+use BitBag\SyliusByrdShippingExportPlugin\Api\Model\ByrdProduct;
+use BitBag\SyliusByrdShippingExportPlugin\Entity\ByrdProductMappingInterface;
+use BitBag\SyliusByrdShippingExportPlugin\Repository\ByrdProductMappingRepositoryInterface;
 use BitBag\SyliusShippingExportPlugin\Entity\ShippingGatewayInterface;
 use Sylius\Component\Core\Model\OrderInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,14 +27,27 @@ final class ByrdHttpClient implements ByrdHttpClientInterface
     /** @var HttpClientInterface */
     private $httpClient;
 
+    /** @var ByrdProductMappingRepositoryInterface */
+    private $byrdProductMappingRepository;
+
+    /** @var ByrdModelFactoryInterface */
+    private $byrdModelFactory;
+
     /** @var string */
     private $apiUrl;
 
+    /** @var string */
+    private $token;
+
     public function __construct(
         HttpClientInterface $httpClient,
+        ByrdProductMappingRepositoryInterface $byrdProductMappingRepository,
+        ByrdModelFactoryInterface $byrdModelFactory,
         string $apiUrl
     ) {
         $this->httpClient = $httpClient;
+        $this->byrdProductMappingRepository = $byrdProductMappingRepository;
+        $this->byrdModelFactory = $byrdModelFactory;
         $this->apiUrl = $apiUrl;
     }
 
@@ -38,10 +55,10 @@ final class ByrdHttpClient implements ByrdHttpClientInterface
         OrderInterface $order,
         ShippingGatewayInterface $shippingGateway
     ): void {
-        $token = $this->receiveAuthorizationToken($shippingGateway);
+        $this->token = $this->receiveAuthorizationToken($shippingGateway);
 
-        $requestBody = $this->constructNewShipmentRequest($shippingGateway, $order);
-        $request = $this->buildRequest($requestBody, $token);
+        $requestBody = $this->constructNewShipmentRequest($order);
+        $request = $this->buildRequest($requestBody, $this->token);
 
         $response = $this->httpClient->request(
             Request::METHOD_POST, $this->createUrl('/shipments'), $request
@@ -78,16 +95,19 @@ final class ByrdHttpClient implements ByrdHttpClientInterface
     }
 
     private function buildRequest(
-        array $parameters,
+        ?array $parameters = null,
         ?string $token = null
     ): array {
         $request = [
-            'body' => json_encode($parameters),
             'headers' => [
                 'Accept' => 'application/json',
                 'Content-Type' => 'application/json',
             ]
         ];
+
+        if ($parameters !== null) {
+            $request['body'] = json_encode($parameters);
+        }
 
         if ($token !== null) {
             $request['headers']['Authorization'] = 'Bearer '.$token;
@@ -97,10 +117,9 @@ final class ByrdHttpClient implements ByrdHttpClientInterface
     }
 
     private function constructNewShipmentRequest(
-        ShippingGatewayInterface $shippingGateway,
         OrderInterface $order
     ): array {
-        $request = $this->constructNewShippingRequestBase($shippingGateway, $order);
+        $request = $this->constructNewShippingRequestBase($order);
 
         $request['shipmentItems'] = $this->createShipmentItemsRequest($order);
         $request['destinationAddress'] = $this->createDestinationAddressRequest($order);
@@ -109,20 +128,19 @@ final class ByrdHttpClient implements ByrdHttpClientInterface
     }
 
     private function constructNewShippingRequestBase(
-        ShippingGatewayInterface $shippingGateway,
         OrderInterface $order
     ): array {
         $customer = $order->getCustomer();
-        $gatewayConfig = $shippingGateway->getConfig();
+        $shippingAddress = $order->getShippingAddress();
 
         return [
-            "destinationName" => $customer->getFullName(),
-            "destinationPhone" => $customer->getPhoneNumber(),
+            "destinationName" => $shippingAddress->getFullName(),
+            "destinationPhone" => $shippingAddress->getPhoneNumber(),
             "destinationEmail" => $customer->getEmailCanonical(),
-            "destinationCompany" => $order->getBillingAddress()->getCompany(),
+            "destinationCompany" => $shippingAddress->getCompany(),
             "description" => $order->getNotes(),
             "fragile" => false,
-            "option" => $gatewayConfig['send_option'],
+            "option" => 'standard',
             "status" => "new",
         ];
     }
@@ -134,24 +152,53 @@ final class ByrdHttpClient implements ByrdHttpClientInterface
 
         foreach ($order->getItems() as $item) {
             $product = $item->getProduct();
-            if (!$product->hasMatchedByrdProduct()) {
+
+            /** @var ByrdProductMappingInterface|null $byrdMapping */
+            $byrdMapping = $this->byrdProductMappingRepository->findOneByProduct($product);
+            if (!$byrdMapping) {
                 continue;
             }
 
-            $shipmentItem = [
-                "lotNumber" => null,
-                "amount" => $item->getQuantity(),
-                "byrdProductID" => $byrdProduct->getByrdProductId(),
-                "description" => $byrdProduct->getDescription(),
-                "productName" => $byrdProduct->getName(),
-                "sku" => $byrdProduct->getSku(),
-                "price" => $item->getUnitPrice(),
-            ];
-
-            $shipmentItems[] = $shipmentItem;
+            $shipmentItems[] = $this->createShipmentItem(
+                $byrdMapping->getByrdProductSku(),
+                $item->getQuantity()
+            );
         }
 
         return $shipmentItems;
+    }
+
+    private function createShipmentItem(
+        string $byrdProductSku,
+        int $quantity
+    ): array {
+        $byrdProduct = $this->fetchByrdProductInformation($byrdProductSku);
+
+        return [
+            "amount" => $quantity,
+            "byrdProductID" => $byrdProduct->getId(),
+            "description" => $byrdProduct->getDescription(),
+            "productName" => $byrdProduct->getName(),
+            "sku" => $byrdProductSku,
+        ];
+    }
+
+    private function fetchByrdProductInformation(string $byrdProductSku): ByrdProduct
+    {
+        $response = $this->httpClient->request(
+            Request::METHOD_GET,
+            $this->createUrl('/warehouse/products?sku='.$byrdProductSku),
+            $this->buildRequest(null, $this->token)
+        );
+
+        $content = json_decode($response->getContent());
+        $product = current($content->data);
+
+        return $this->byrdModelFactory->create(
+            $product->id,
+            $product->name,
+            $product->description
+        );
     }
 
     private function createDestinationAddressRequest(OrderInterface $order): array

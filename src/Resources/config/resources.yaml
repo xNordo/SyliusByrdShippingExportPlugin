@@ -1,0 +1,9 @@
+sylius_resource:
+  resources:
+    bitbag_sylius_byrd_shipping_export_plugin.byrd_product_mapping:
+      driver: doctrine/orm
+      classes:
+        model: BitBag\SyliusByrdShippingExportPlugin\Entity\ByrdProductMapping
+        interface: BitBag\SyliusByrdShippingExportPlugin\Entity\ByrdProductMappingInterface
+        form: BitBag\SyliusByrdShippingExportPlugin\Form\Type\ByrdProductMappingType
+        repository: BitBag\SyliusByrdShippingExportPlugin\Repository\ByrdProductMappingRepository

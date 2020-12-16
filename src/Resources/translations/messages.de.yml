@@ -1,5 +1,11 @@
-bitbag:
+bitbag_sylius_byrd_shipping_export_plugin:
     ui:
+        byrd_product_mapping_label: Byrd-Produktzuordnung
+        byrd_product_mappings: Byrd-Produktzuordnung
+        new_byrd_product_mapping: Neues Byrd-Produktmapping
+        edit_byrd_product_mapping: Bearbeiten die Byrd-Produktzuordnung
+        byrd_product_sku: Byrd Produkt-SKU
+        sylius_product: Sylius Produkt
         label: Name
         api_key: API-Schlüssel
         api_secret: API-Geheimnis

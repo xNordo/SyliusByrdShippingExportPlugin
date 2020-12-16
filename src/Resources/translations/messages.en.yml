@@ -1,5 +1,11 @@
-bitbag:
+bitbag_sylius_byrd_shipping_export_plugin:
     ui:
+        byrd_product_mapping_label: Byrd product mapping
+        new_byrd_product_mapping: New Byrd product mapping
+        edit_byrd_product_mapping: Edit Byrd product mapping
+        byrd_product_mappings: Byrd product mapping
+        byrd_product_sku: Byrd product SKU
+        sylius_product: Sylius Product
         label: Name
         api_key: API key
         api_secret: API secret

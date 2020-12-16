@@ -12,22 +12,21 @@ declare(strict_types=1);
 
 namespace BitBag\SyliusByrdShippingExportPlugin\Form\Type;
 
+use Sylius\Bundle\ProductBundle\Form\Type\ProductAutocompleteChoiceType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 
-final class ShippingGatewayType extends AbstractType
+final class ByrdProductMappingType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('api_key', TextType::class, [
-                'label' => 'bitbag_byrd_shipping_export_plugin.ui.api_key',
+            ->add('product', ProductAutocompleteChoiceType::class, [
+                'label' => 'bitbag_sylius_byrd_shipping_export_plugin.ui.sylius_product',
             ])
-            ->add('api_secret', PasswordType::class, [
-                'label' => 'bitbag_byrd_shipping_export_plugin.ui.api_secret',
+            ->add('byrdProductSku', TextType::class, [
+                'label' => 'bitbag_sylius_byrd_shipping_export_plugin.ui.byrd_product_sku',
             ])
         ;
     }

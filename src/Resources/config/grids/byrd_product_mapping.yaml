@@ -1,0 +1,20 @@
+sylius_grid:
+    grids:
+        bitbag_sylius_byrd_shipping_export__admin__byrd_product_mapping:
+            driver:
+                name: doctrine/orm
+                options:
+                    class: BitBag\SyliusByrdShippingExportPlugin\Entity\ByrdProductMapping
+            fields:
+                byrdProductSku:
+                    type: string
+                    label: bitbag_sylius_byrd_shipping_export_plugin.ui.byrd_product_sku
+            actions:
+                main:
+                    create:
+                        type: create
+                item:
+                    update:
+                        type: update
+                    delete:
+                        type: delete
