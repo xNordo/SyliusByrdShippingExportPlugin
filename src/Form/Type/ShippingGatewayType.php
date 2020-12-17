@@ -24,10 +24,10 @@ final class ShippingGatewayType extends AbstractType
     {
         $builder
             ->add('api_key', TextType::class, [
-                'label' => 'bitbag_byrd_shipping_export_plugin.ui.api_key',
+                'label' => 'bitbag_sylius_byrd_shipping_export_plugin.ui.api_key',
             ])
             ->add('api_secret', PasswordType::class, [
-                'label' => 'bitbag_byrd_shipping_export_plugin.ui.api_secret',
+                'label' => 'bitbag_sylius_byrd_shipping_export_plugin.ui.api_secret',
             ])
         ;
     }
