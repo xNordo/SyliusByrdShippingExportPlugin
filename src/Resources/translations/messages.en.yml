@@ -9,7 +9,14 @@ bitbag_sylius_byrd_shipping_export_plugin:
         label: Name
         api_key: API key
         api_secret: API secret
+        auto_sku_matching: Auto-matching products by SKU
+        auto_export: Auto-export shipping data when order is paid
+        product: Sylius product
+        info_header: Information
+        message:
+            auto_mapping_turned_on: Auto-matching products by SKU is turned on. Changes in this section won't have impact until the option is disabled.
 
 bitbag:
     ui:
         failed: Failed
+        retry: Retry

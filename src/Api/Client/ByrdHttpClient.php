@@ -42,6 +42,7 @@ final class ByrdHttpClient implements ByrdHttpClientInterface
         $token = $this->receiveAuthorizationToken($shippingGateway);
 
         $this->createShipmentRequest->setOrder($order);
+        $this->createShipmentRequest->setShippingGateway($shippingGateway);
         $response = $this->createShipmentRequest->sendAuthorized($token);
 
         if ($response->getStatusCode() !== Response::HTTP_CREATED) {
@@ -53,8 +54,8 @@ final class ByrdHttpClient implements ByrdHttpClientInterface
     {
         $gatewayConfig = $shippingGateway->getConfig();
         $this->generateTokenRequest->setCredentials(
-            $gatewayConfig['api_key'],
-            $gatewayConfig['api_secret']
+            $gatewayConfig['api_key'] ?? "",
+            $gatewayConfig['api_secret'] ?? ""
         );
 
         $response = $this->generateTokenRequest->send();

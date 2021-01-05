@@ -6,6 +6,12 @@ sylius_grid:
                 options:
                     class: BitBag\SyliusByrdShippingExportPlugin\Entity\ByrdProductMapping
             fields:
+                product:
+                    type: twig
+                    label: bitbag_sylius_byrd_shipping_export_plugin.ui.product
+                    path: .
+                    options:
+                        template: "@BitBagByrdShippingExportPlugin/Grid/Field/ByrdProductMapping/product.html.twig"
                 byrdProductSku:
                     type: string
                     label: bitbag_sylius_byrd_shipping_export_plugin.ui.byrd_product_sku

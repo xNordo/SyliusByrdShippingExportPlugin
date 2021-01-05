@@ -17,6 +17,7 @@ use BitBag\SyliusByrdShippingExportPlugin\Api\Factory\ByrdModelFactoryInterface;
 use BitBag\SyliusByrdShippingExportPlugin\Api\Model\ByrdProduct;
 use BitBag\SyliusByrdShippingExportPlugin\Entity\ByrdProductMappingInterface;
 use BitBag\SyliusByrdShippingExportPlugin\Repository\ByrdProductMappingRepositoryInterface;
+use BitBag\SyliusShippingExportPlugin\Entity\ShippingGatewayInterface;
 use Sylius\Component\Core\Model\OrderInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
@@ -41,6 +42,9 @@ final class CreateShipmentByrdRequest extends AbstractByrdRequest
     /** @var OrderInterface|null */
     private $order;
 
+    /** @var ShippingGatewayInterface|null $shippingGateway */
+    private $shippingGateway;
+
     public function __construct(
         HttpClientInterface $httpClient,
         ByrdProductMappingRepositoryInterface $byrdProductMappingRepository,
@@ -55,9 +59,16 @@ final class CreateShipmentByrdRequest extends AbstractByrdRequest
         $this->byrdModelFactory = $byrdModelFactory;
     }
 
-    public function setOrder(OrderInterface $order): void
-    {
+    public function setOrder(
+        OrderInterface $order
+    ): void {
         $this->order = $order;
+    }
+
+    public function setShippingGateway(
+        ShippingGatewayInterface $shippingGateway
+    ): void {
+        $this->shippingGateway = $shippingGateway;
     }
 
     public function buildRequest(): array
@@ -100,19 +111,34 @@ final class CreateShipmentByrdRequest extends AbstractByrdRequest
         foreach ($order->getItems() as $item) {
             $product = $item->getProduct();
 
-            /** @var ByrdProductMappingInterface|null $byrdMapping */
-            $byrdMapping = $this->byrdProductMappingRepository->findOneByProduct($product);
-            if (!$byrdMapping) {
-                continue;
+            $sku = $product->getCode();
+            if (!$this->autoMatchBySku()) {
+                /** @var ByrdProductMappingInterface|null $byrdMapping */
+                $byrdMapping = $this->byrdProductMappingRepository->findOneByProduct($product);
+                if (!$byrdMapping) {
+                    continue;
+                }
+
+                $sku = $byrdMapping->getByrdProductSku();
             }
 
             $shipmentItems[] = $this->createShipmentItem(
-                $byrdMapping->getByrdProductSku(),
+                $sku,
                 $item->getQuantity()
             );
         }
 
         return $shipmentItems;
+    }
+
+    private function autoMatchBySku(): bool
+    {
+        if (!$this->shippingGateway) {
+            return true;
+        }
+
+        $config = $this->shippingGateway->getConfig();
+        return isset($config['auto_sku_matching']) && $config['auto_sku_matching'] === true;
     }
 
     private function createShipmentItem(

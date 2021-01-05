@@ -1,0 +1,8 @@
+winzou_state_machine:
+  sylius_payment:
+    callbacks:
+      after:
+        bitbag_sylius_byrd_shipping_export_plugin_autoexport_shipping:
+          on: ['complete']
+          do: ['@bitbag.byrd_shipping_export_plugin.event_listener.byrd_shipping_export', 'autoExport']
+          args: ['object']

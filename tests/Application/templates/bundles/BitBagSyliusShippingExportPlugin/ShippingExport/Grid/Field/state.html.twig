@@ -3,7 +3,11 @@
 {% if  data.state == 'new' %}
     {% include '@BitBagSyliusShippingExportPlugin/ShippingExport/Partial/_exportShipment.html.twig' %}
 {% elseif data.state == 'failed' %}
-    <span class="shipping-export-state ui red label"><i class="x icon"></i> {{ value|trans }}</span>
+    <form action="{{ path('bitbag_admin_export_single_shipment', {'id' : data.id}) }}" method="POST">
+        <span class="shipping-export-state ui red label"><i class="x icon"></i> {{ value|trans }}</span>
+        <input type="hidden" name="_method" value="PUT">
+        <button class="ui labeled icon primary button mini shipping-export-state"><i class="arrow up icon"></i> {{ 'bitbag.ui.retry'|trans }}</button>
+    </form>
 {% else %}
     <span class="shipping-export-state ui green label"><i class="check icon"></i> {{ value|trans }}</span>
 {% endif %}

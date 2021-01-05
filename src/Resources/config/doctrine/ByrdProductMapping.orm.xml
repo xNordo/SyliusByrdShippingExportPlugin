@@ -12,7 +12,7 @@
 
         <field name="byrdProductSku" column="byrd_product_sku" type="string" unique="true"/>
 
-        <one-to-one field="product" target-entity="Sylius\Component\Core\Model\Product" />
+        <one-to-one field="product" target-entity="Sylius\Component\Core\Model\ProductInterface" />
 
     </mapped-superclass>
 </doctrine-mapping>

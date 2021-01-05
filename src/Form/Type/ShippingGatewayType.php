@@ -13,8 +13,7 @@ declare(strict_types=1);
 namespace BitBag\SyliusByrdShippingExportPlugin\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 
@@ -26,8 +25,16 @@ final class ShippingGatewayType extends AbstractType
             ->add('api_key', TextType::class, [
                 'label' => 'bitbag_sylius_byrd_shipping_export_plugin.ui.api_key',
             ])
-            ->add('api_secret', PasswordType::class, [
+            ->add('api_secret', TextType::class, [
                 'label' => 'bitbag_sylius_byrd_shipping_export_plugin.ui.api_secret',
+            ])
+            ->add('auto_sku_matching', CheckboxType::class, [
+                'label' => 'bitbag_sylius_byrd_shipping_export_plugin.ui.auto_sku_matching',
+                'required' => false,
+            ])
+            ->add('auto_export', CheckboxType::class, [
+                'label' => 'bitbag_sylius_byrd_shipping_export_plugin.ui.auto_export',
+                'required' => false,
             ])
         ;
     }

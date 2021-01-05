@@ -1,0 +1,49 @@
+{% extends '@SyliusAdmin/layout.html.twig' %}
+
+{% set definition = resources.definition %}
+{% set data = resources.data %}
+{% set event_prefix = metadata.applicationName ~ '.admin.' ~ metadata.name ~ '.index' %}
+
+{% set header = configuration.vars.header|default(metadata.applicationName~'.ui.'~metadata.pluralName) %}
+
+{% block title %}{{ header|trans }} {{ parent() }}{% endblock %}
+
+{% block content %}
+
+    {{ sonata_block_render_event(event_prefix ~ '.before_header', {'resources': resources}) }}
+
+    {% include '@SyliusAdmin/Crud/Index/_header.html.twig' %}
+
+    {% if byrd_auto_mapping_state() %}
+        <div class="ui icon negative message sylius-flash-message">
+            <i class="close icon"></i>
+            <i class="x icon"></i>
+            <div class="content">
+                <div class="header">
+                    {{ 'bitbag_sylius_byrd_shipping_export_plugin.ui.info_header'|trans }}
+                </div>
+                <p>
+                    {{ 'bitbag_sylius_byrd_shipping_export_plugin.ui.message.auto_mapping_turned_on'|trans }}
+                </p>
+            </div>
+        </div>
+    {% endif %}
+
+    {{ sonata_block_render_event(event_prefix ~ '.after_header', {'resources': resources}) }}
+
+    {% include '@SyliusAdmin/Crud/Index/_content.html.twig' %}
+
+    {{ sonata_block_render_event(event_prefix ~ '.after_content', {'resources': resources}) }}
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+
+    {{ sonata_block_render_event(event_prefix ~ '.stylesheets') }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    {{ sonata_block_render_event(event_prefix ~ '.javascripts') }}
+{% endblock %}

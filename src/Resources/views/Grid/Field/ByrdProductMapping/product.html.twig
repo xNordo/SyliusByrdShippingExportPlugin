@@ -1,0 +1,5 @@
+{% if data.getProduct() is null %}
+    No
+{% else %}
+    <a href="{{ path('sylius_admin_product_show', {id:data.getProduct().getId()}) }}">{{ data.getProduct().getName() }}</a>
+{% endif %}

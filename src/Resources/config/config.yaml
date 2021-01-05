@@ -1,3 +1,4 @@
 imports:
   - { resource: "@BitBagByrdShippingExportPlugin/Resources/config/grids.yaml" }
   - { resource: "@BitBagByrdShippingExportPlugin/Resources/config/resources.yaml" }
+  - { resource: "@BitBagByrdShippingExportPlugin/Resources/config/winzou_state_machine.yaml" }
