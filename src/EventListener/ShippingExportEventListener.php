@@ -117,6 +117,10 @@ final class ShippingExportEventListener
             return;
         }
 
+        if ($exportObject->getState() !== ShippingExportInterface::STATE_NEW) {
+            return;
+        }
+
         $event = new ExportShipmentEvent(
             $exportObject,
             $this->flashBag,

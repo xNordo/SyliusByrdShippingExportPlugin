@@ -11,6 +11,11 @@ bitbag_sylius_byrd_shipping_export_plugin:
         api_secret: API-Geheimnis
         auto_sku_matching: Auto-Matching-Produkte von SKU
         auto_export: Versanddaten automatisch exportieren, wenn die Bestellung bezahlt ist
+        shipping_option: Versandoption
+        shipping_option_type:
+            standard: Standard
+            express: Ausdrücklich
+            economy: Wirtschaftlich
         product: Sylius produkt
         info_header: Information
         message:
@@ -22,5 +27,6 @@ bitbag_sylius_byrd_shipping_export_plugin:
 
 bitbag:
     ui:
+        label: Etikette
         failed: Gescheitert
         retry: Wiederholen

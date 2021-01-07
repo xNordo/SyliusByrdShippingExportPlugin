@@ -81,6 +81,10 @@ final class CreateShipmentByrdRequest extends AbstractByrdRequest
         }
 
         $request['destinationAddress'] = $this->createDestinationAddressRequest($this->order);
+        $config = $this->shippingGateway->getConfig();
+        if (isset($config['shipping_option'])) {
+            $request['option'] = $config['shipping_option'];
+        }
 
         return $this->buildRequestFromParams($request);
     }
