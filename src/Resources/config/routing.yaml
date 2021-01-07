@@ -8,3 +8,8 @@ app_admin_byrd_product_mapping:
     redirect: index
     permission: true
   type: sylius.resource
+
+sylius_byrd_shipping_export_plugin_filter_byrd_products:
+  path: /byrd_products
+  methods: GET
+  controller: sylius_byrd_shipping_export_plugin.controller.filter_byrd_products

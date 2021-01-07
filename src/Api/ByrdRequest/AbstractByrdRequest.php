@@ -46,10 +46,12 @@ abstract class AbstractByrdRequest
 
     public function send(): ResponseInterface
     {
+        $request = $this->buildRequest();
+
         return $this->httpClient->request(
             $this->requestMethod,
             $this->requestUrl,
-            $this->buildRequest()
+            $request
         );
     }
 
@@ -57,10 +59,12 @@ abstract class AbstractByrdRequest
     {
         $this->token = $token;
 
+        $request = $this->buildRequest();
+
         return $this->httpClient->request(
             $this->requestMethod,
             $this->requestUrl,
-            $this->addAuthorizationToken($this->buildRequest(), $token)
+            $this->addAuthorizationToken($request, $token)
         );
     }
 

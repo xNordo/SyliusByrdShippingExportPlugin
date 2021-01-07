@@ -8,6 +8,11 @@
             <argument type="service" id="translator" />
             <tag name="form.type" />
         </service>
+
+        <service id="bitbag_sylius_byrd_plugin.form_type.autocomplete_choice_type" class="BitBag\SyliusByrdShippingExportPlugin\Form\Type\AutocompleteChoiceType">
+            <argument type="service" id="router"/>
+            <tag name="form.type" />
+        </service>
     </services>
 </container>
 

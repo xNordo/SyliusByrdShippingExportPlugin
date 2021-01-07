@@ -43,11 +43,29 @@ final class ByrdProductMappingType extends AbstractType
         $builder
             ->add('product', ProductAutocompleteChoiceType::class, [
                 'label' => 'bitbag_sylius_byrd_shipping_export_plugin.ui.sylius_product',
+                'required' => true,
             ])
-            ->add('byrdProductSku', TextType::class, [
+            ->add('byrdProductSku', AutocompleteChoiceType::class, [
                 'label' => 'bitbag_sylius_byrd_shipping_export_plugin.ui.byrd_product_sku',
+                'choice_name' => 'name',
+                'choice_value' => 'sku',
+                'required' => true,
             ])
             ->addEventListener(FormEvents::SUBMIT, function (FormEvent $event): void {
+                if (!$event->getData()->getProduct()) {
+                    $event->getForm()->addError(new FormError(
+                        $this->translator->trans("bitbag_sylius_byrd_shipping_export_plugin.ui.form.error.product_is_required")
+                    ));
+                    return;
+                }
+
+                if (empty($event->getData()->getByrdProductSku())) {
+                    $event->getForm()->addError(new FormError(
+                        $this->translator->trans("bitbag_sylius_byrd_shipping_export_plugin.ui.form.error.sku_is_required")
+                    ));
+                    return;
+                }
+
                 $existingMapping = $this->byrdProductMappingRepository->findOneBy([
                     'product' => $event->getData()->getProduct()->getId()
                 ]);

@@ -25,14 +25,22 @@ final class FindProductByrdRequest extends AbstractByrdRequest
     /** @var string|null */
     private $byrdProductSku;
 
+    /** @var string */
+    private $searchField = 'q';
+
     public function setByrdProductSku(string $byrdProductSku): void
     {
         $this->byrdProductSku = $byrdProductSku;
     }
 
+    public function setSearchField(string $searchField): void
+    {
+        $this->searchField = $searchField;
+    }
+
     public function buildRequest(): array
     {
-        $this->requestUrl .= '?sku=' . $this->byrdProductSku;
+        $this->requestUrl .= '?' . $this->searchField . '=' . $this->byrdProductSku;
 
         return $this->buildRequestFromParams([]);
     }

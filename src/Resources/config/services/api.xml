@@ -5,6 +5,7 @@
         <service id="bitbag.byrd_shipping_export_plugin.api.byrd_http_client" class="BitBag\SyliusByrdShippingExportPlugin\Api\Client\ByrdHttpClient">
             <argument type="service" id="bitbag.byrd_shipping_export_plugin.api.byrd_request.generate_token" />
             <argument type="service" id="bitbag.byrd_shipping_export_plugin.api.byrd_request.create_shipment" />
+            <argument type="service" id="bitbag.byrd_shipping_export_plugin.api.byrd_request.find_product" />
         </service>
 
         <service id="bitbag.byrd_shipping_export_plugin.api.byrd_model_factory" class="BitBag\SyliusByrdShippingExportPlugin\Api\Factory\ByrdModelFactory" />

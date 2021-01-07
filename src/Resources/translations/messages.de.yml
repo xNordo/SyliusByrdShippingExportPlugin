@@ -24,6 +24,8 @@ bitbag_sylius_byrd_shipping_export_plugin:
             error:
                 product_already_in_use: Sylius Produkt bereits im Einsatz!
                 sku_already_in_use: Byrd SKU bereits im Einsatz!
+                product_is_required: Bitte wählen Sie Sylius Produkt
+                sku_is_required: Bitte wählen Sie Byrd Produkt
 
 bitbag:
     ui:

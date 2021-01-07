@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace BitBag\SyliusByrdShippingExportPlugin\Api\Client;
 
+use BitBag\SyliusByrdShippingExportPlugin\Api\ByrdRequest\FindProductByrdRequest;
 use BitBag\SyliusByrdShippingExportPlugin\Api\Exception\AuthorizationIssueException;
 use BitBag\SyliusByrdShippingExportPlugin\Api\ByrdRequest\CreateShipmentByrdRequest;
 use BitBag\SyliusByrdShippingExportPlugin\Api\ByrdRequest\GenerateTokenByrdRequest;
@@ -27,12 +28,17 @@ final class ByrdHttpClient implements ByrdHttpClientInterface
     /** @var CreateShipmentByrdRequest */
     private $createShipmentRequest;
 
+    /** @var FindProductByrdRequest */
+    private $findProductByrdRequest;
+
     public function __construct(
         GenerateTokenByrdRequest $generateTokenRequest,
-        CreateShipmentByrdRequest $createShipmentRequest
+        CreateShipmentByrdRequest $createShipmentRequest,
+        FindProductByrdRequest $findProductByrdRequest
     ) {
         $this->generateTokenRequest = $generateTokenRequest;
         $this->createShipmentRequest = $createShipmentRequest;
+        $this->findProductByrdRequest = $findProductByrdRequest;
     }
 
     public function createShipment(
@@ -70,5 +76,28 @@ final class ByrdHttpClient implements ByrdHttpClientInterface
         }
 
         return $content->token;
+    }
+
+    public function filterProductsBySku(?string $sku, ShippingGatewayInterface $shippingGateway): array
+    {
+        $token = $this->receiveAuthorizationToken($shippingGateway);
+
+        $this->findProductByrdRequest->setSearchField('q');
+        $this->findProductByrdRequest->setByrdProductSku($sku);
+        $response = $this->findProductByrdRequest->sendAuthorized($token);
+        $response = json_decode($response->getContent());
+        if (!$response->data) {
+            return [];
+        }
+
+        $products = [];
+        foreach ($response->data as $key => $value) {
+            $products[] = [
+                'name' => sprintf("%s (SKU: %s)", $value->name, $value->sku),
+                'sku' => $value->sku,
+            ];
+        }
+
+        return $products;
     }
 }
