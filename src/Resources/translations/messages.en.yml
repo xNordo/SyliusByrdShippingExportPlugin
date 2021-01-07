@@ -15,6 +15,10 @@ bitbag_sylius_byrd_shipping_export_plugin:
         info_header: Information
         message:
             auto_mapping_turned_on: Auto-matching products by SKU is turned on. Changes in this section won't have impact until the option is disabled.
+        form:
+            error:
+                product_already_in_use: Sylius product already in use!
+                sku_already_in_use: Byrd SKU already in use!
 
 bitbag:
     ui:
