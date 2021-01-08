@@ -20,13 +20,13 @@ class ByrdProduct
     /** @var string */
     private $name;
 
-    /** @var string */
+    /** @var string|null */
     private $description;
 
     public function __construct(
         string $id,
         string $name,
-        string $description
+        ?string $description
     ) {
         $this->id = $id;
         $this->name = $name;
@@ -43,7 +43,7 @@ class ByrdProduct
         return $this->name;
     }
 
-    public function getDescription(): string
+    public function getDescription(): ?string
     {
         return $this->description;
     }
