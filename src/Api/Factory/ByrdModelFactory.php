@@ -19,7 +19,7 @@ final class ByrdModelFactory implements ByrdModelFactoryInterface
     public function create(
         string $id,
         string $name,
-        string $description
+        ?string $description
     ): ByrdProduct {
         return new ByrdProduct($id, $name, $description);
     }
