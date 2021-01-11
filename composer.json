@@ -52,12 +52,13 @@
         "symfony/intl": "^4.4|^5.0",
         "symfony/web-profiler-bundle": "^4.4|^5.0",
         "symfony/web-server-bundle": "^4.4|^5.0",
-        "vimeo/psalm": "3.11.4"
+        "vimeo/psalm": "3.11.4",
+        "lchrusciel/api-test-case": "^4.1"
     },
     "autoload": {
         "psr-4": {
             "BitBag\\SyliusByrdShippingExportPlugin\\": "src/",
-            "Tests\\BitBag\\SyliusByrdShippingExportPlugin\\": "tests/"
+            "Tests\\BitBag\\SyliusByrdShippingExportPlugin\\": "tests/PHPUnit"
         }
     },
     "autoload-dev": {
