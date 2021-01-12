@@ -12,11 +12,11 @@ declare(strict_types=1);
 
 namespace BitBag\SyliusByrdShippingExportPlugin\Repository;
 
-use BitBag\SyliusByrdShippingExportPlugin\Entity\ByrdProductMapping;
+use BitBag\SyliusByrdShippingExportPlugin\Entity\ByrdProductMappingInterface;
 use Sylius\Component\Core\Model\ProductInterface;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
 
 interface ByrdProductMappingRepositoryInterface extends RepositoryInterface
 {
-    public function findForProduct(ProductInterface $product): ?ByrdProductMapping;
+    public function findForProduct(ProductInterface $product): ?ByrdProductMappingInterface;
 }

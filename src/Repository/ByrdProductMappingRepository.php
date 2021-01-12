@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace BitBag\SyliusByrdShippingExportPlugin\Repository;
 
 use BitBag\SyliusByrdShippingExportPlugin\Entity\ByrdProductMapping;
+use BitBag\SyliusByrdShippingExportPlugin\Entity\ByrdProductMappingInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Sylius\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
 use Sylius\Component\Core\Model\ProductInterface;
@@ -24,7 +25,7 @@ final class ByrdProductMappingRepository extends EntityRepository implements Byr
         parent::__construct($em, $em->getClassMetadata(ByrdProductMapping::class));
     }
 
-    public function findForProduct(ProductInterface $product): ?ByrdProductMapping
+    public function findForProduct(ProductInterface $product): ?ByrdProductMappingInterface
     {
         /** @var ByrdProductMapping|null $byrdProductMapping */
         $byrdProductMapping = $this->findOneBy(['product' => $product]);

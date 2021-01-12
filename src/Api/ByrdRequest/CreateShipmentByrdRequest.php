@@ -12,17 +12,24 @@ declare(strict_types=1);
 
 namespace BitBag\SyliusByrdShippingExportPlugin\Api\ByrdRequest;
 
+use BitBag\SyliusByrdShippingExportPlugin\Api\Exception\AuthorizationIssueException;
 use BitBag\SyliusByrdShippingExportPlugin\Api\Exception\EmptyProductListException;
+use BitBag\SyliusByrdShippingExportPlugin\Api\Exception\NoOrderAttachedException;
+use BitBag\SyliusByrdShippingExportPlugin\Api\Exception\NoShippingGatewayAttachedException;
+use BitBag\SyliusByrdShippingExportPlugin\Api\Exception\ProductNotFoundException;
 use BitBag\SyliusByrdShippingExportPlugin\Api\Factory\ByrdModelFactoryInterface;
 use BitBag\SyliusByrdShippingExportPlugin\Api\Model\ByrdProduct;
+use BitBag\SyliusByrdShippingExportPlugin\Api\RequestSenderInterface;
 use BitBag\SyliusByrdShippingExportPlugin\Entity\ByrdProductMappingInterface;
 use BitBag\SyliusByrdShippingExportPlugin\Repository\ByrdProductMappingRepositoryInterface;
 use BitBag\SyliusShippingExportPlugin\Entity\ShippingGatewayInterface;
 use Sylius\Component\Core\Model\OrderInterface;
+use Sylius\Component\Core\Model\OrderItemInterface;
+use Sylius\Component\Core\Model\ShippingMethodInterface;
+use Sylius\Component\Shipping\Model\ShippingCategoryInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Contracts\HttpClient\HttpClientInterface;
 
-final class CreateShipmentByrdRequest extends AbstractByrdRequest
+final class CreateShipmentByrdRequest extends AbstractByrdRequest implements CreateShipmentByrdRequestInterface
 {
     /** @var ByrdProductMappingRepositoryInterface */
     private $byrdProductMappingRepository;
@@ -33,6 +40,9 @@ final class CreateShipmentByrdRequest extends AbstractByrdRequest
     /** @var ByrdModelFactoryInterface */
     private $byrdModelFactory;
 
+    /** @var RequestSenderInterface */
+    private $requestSender;
+
     /** @var string */
     protected $requestMethod = Request::METHOD_POST;
 
@@ -40,23 +50,25 @@ final class CreateShipmentByrdRequest extends AbstractByrdRequest
     protected $requestUrl = "/shipments";
 
     /** @var OrderInterface|null */
-    private $order;
+    private $order = null;
 
     /** @var ShippingGatewayInterface|null $shippingGateway */
-    private $shippingGateway;
+    private $shippingGateway = null;
 
     public function __construct(
-        HttpClientInterface $httpClient,
         ByrdProductMappingRepositoryInterface $byrdProductMappingRepository,
-        FindProductByrdRequest $findProductRequest,
+        FindProductByrdRequestInterface $findProductRequest,
         ByrdModelFactoryInterface $byrdModelFactory,
+        RequestSenderInterface $requestSender,
         string $apiUrl
-    ) {
-        parent::__construct($httpClient, $apiUrl);
+    )
+    {
+        parent::__construct($apiUrl);
 
         $this->byrdProductMappingRepository = $byrdProductMappingRepository;
         $this->findProductRequest = $findProductRequest;
         $this->byrdModelFactory = $byrdModelFactory;
+        $this->requestSender = $requestSender;
     }
 
     public function setOrder(
@@ -71,16 +83,29 @@ final class CreateShipmentByrdRequest extends AbstractByrdRequest
         $this->shippingGateway = $shippingGateway;
     }
 
-    public function buildRequest(): array
+    public function buildRequest(?string $authorizationToken): array
     {
+        if ($this->shippingGateway === null) {
+            throw new NoShippingGatewayAttachedException("You have to set up shippingGateway via setShippingGateway(...) method");
+        }
+
+        if ($this->order === null) {
+            throw new NoOrderAttachedException("You have to set up order via setOrder(...) method");
+        }
+
+        if ($authorizationToken === null) {
+            throw new AuthorizationIssueException('No token provided');
+        }
+
         $request = $this->constructNewShippingRequestBase($this->order);
 
-        $request['shipmentItems'] = $this->createShipmentItemsRequest($this->order);
+        $request['shipmentItems'] = $this->createShipmentItemsRequest($this->order, $authorizationToken);
         if (empty($request['shipmentItems'])) {
             throw new EmptyProductListException('Cannot sent request with no product');
         }
 
         $request['destinationAddress'] = $this->createDestinationAddressRequest($this->order);
+
         $config = $this->shippingGateway->getConfig();
         if (isset($config['shipping_option'])) {
             $request['option'] = $config['shipping_option'];
@@ -91,7 +116,8 @@ final class CreateShipmentByrdRequest extends AbstractByrdRequest
 
     private function constructNewShippingRequestBase(
         OrderInterface $order
-    ): array {
+    ): array
+    {
         $customer = $order->getCustomer();
         $shippingAddress = $order->getShippingAddress();
 
@@ -108,17 +134,22 @@ final class CreateShipmentByrdRequest extends AbstractByrdRequest
     }
 
     private function createShipmentItemsRequest(
-        OrderInterface $order
-    ): array {
+        OrderInterface $order,
+        string $authorizationToken
+    ): array
+    {
         $shipmentItems = [];
 
         foreach ($order->getItems() as $item) {
             $product = $item->getProduct();
+            if (!$this->hasConfiguredByrdShipment($item)) {
+                continue;
+            }
 
             $sku = $product->getCode();
             if (!$this->autoMatchBySku()) {
                 /** @var ByrdProductMappingInterface|null $byrdMapping */
-                $byrdMapping = $this->byrdProductMappingRepository->findOneByProduct($product);
+                $byrdMapping = $this->byrdProductMappingRepository->findForProduct($product);
                 if (!$byrdMapping) {
                     continue;
                 }
@@ -128,7 +159,8 @@ final class CreateShipmentByrdRequest extends AbstractByrdRequest
 
             $shipmentItems[] = $this->createShipmentItem(
                 $sku,
-                $item->getQuantity()
+                $item->getQuantity(),
+                $authorizationToken
             );
         }
 
@@ -137,19 +169,17 @@ final class CreateShipmentByrdRequest extends AbstractByrdRequest
 
     private function autoMatchBySku(): bool
     {
-        if (!$this->shippingGateway) {
-            return true;
-        }
-
         $config = $this->shippingGateway->getConfig();
         return isset($config['auto_sku_matching']) && $config['auto_sku_matching'] === true;
     }
 
     private function createShipmentItem(
         string $byrdProductSku,
-        int $quantity
-    ): array {
-        $byrdProduct = $this->fetchByrdProductInformation($byrdProductSku);
+        int $quantity,
+        string $authorizationToken
+    ): array
+    {
+        $byrdProduct = $this->fetchByrdProductInformation($byrdProductSku, $authorizationToken);
 
         return [
             "amount" => $quantity,
@@ -160,12 +190,15 @@ final class CreateShipmentByrdRequest extends AbstractByrdRequest
         ];
     }
 
-    private function fetchByrdProductInformation(string $byrdProductSku): ByrdProduct
+    private function fetchByrdProductInformation(string $byrdProductSku, string $authorizationToken): ByrdProduct
     {
         $this->findProductRequest->setByrdProductSku($byrdProductSku);
-        $response = $this->findProductRequest->sendAuthorized($this->token);
+        $response = $this->requestSender->sendAuthorized($this->findProductRequest, $authorizationToken);
 
         $content = json_decode($response->getContent());
+        if (empty($content->data)) {
+            throw new ProductNotFoundException('Product with SKU: ' . $byrdProductSku . ' was not found');
+        }
         $product = current($content->data);
 
         return $this->byrdModelFactory->create(
@@ -185,5 +218,31 @@ final class CreateShipmentByrdRequest extends AbstractByrdRequest
             "postalCode" => $shippingAddress->getPostcode(),
             "thoroughfare" => $shippingAddress->getStreet(),
         ];
+    }
+
+    private function hasConfiguredByrdShipment(OrderItemInterface $orderItem): bool
+    {
+        $variant = $orderItem->getVariant();
+
+        if (!$variant->isShippingRequired()) {
+            return false;
+        }
+
+        /** @var ShippingCategoryInterface $variantsShippingCategory */
+        $variantsShippingCategory = $variant->getShippingCategory();
+        if ($variantsShippingCategory === null) {
+            return false;
+        }
+
+        $gatewaysMethods = $this->shippingGateway->getShippingMethods();
+
+        /** @var ShippingMethodInterface $gatewaysMethod */
+        foreach ($gatewaysMethods as $gatewaysMethod) {
+            if ($gatewaysMethod->getCategory()->getId() === $variantsShippingCategory->getId()) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

@@ -14,7 +14,7 @@ namespace BitBag\SyliusByrdShippingExportPlugin\Api\ByrdRequest;
 
 use Symfony\Component\HttpFoundation\Request;
 
-final class GenerateTokenByrdRequest extends AbstractByrdRequest
+final class GenerateTokenByrdRequest extends AbstractByrdRequest implements GenerateTokenByrdRequestInterface
 {
     /** @var string */
     protected $requestMethod = Request::METHOD_POST;
@@ -34,7 +34,7 @@ final class GenerateTokenByrdRequest extends AbstractByrdRequest
         $this->password = $password;
     }
 
-    public function buildRequest(): array
+    public function buildRequest(?string $authorizationToken): array
     {
         $body = [
             'username' => $this->username,

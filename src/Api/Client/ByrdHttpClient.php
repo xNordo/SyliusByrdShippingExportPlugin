@@ -16,6 +16,7 @@ use BitBag\SyliusByrdShippingExportPlugin\Api\ByrdRequest\FindProductByrdRequest
 use BitBag\SyliusByrdShippingExportPlugin\Api\Exception\AuthorizationIssueException;
 use BitBag\SyliusByrdShippingExportPlugin\Api\ByrdRequest\CreateShipmentByrdRequest;
 use BitBag\SyliusByrdShippingExportPlugin\Api\ByrdRequest\GenerateTokenByrdRequest;
+use BitBag\SyliusByrdShippingExportPlugin\Api\RequestSenderInterface;
 use BitBag\SyliusShippingExportPlugin\Entity\ShippingGatewayInterface;
 use Sylius\Component\Core\Model\OrderInterface;
 use Symfony\Component\HttpFoundation\Response;
@@ -31,14 +32,19 @@ final class ByrdHttpClient implements ByrdHttpClientInterface
     /** @var FindProductByrdRequest */
     private $findProductByrdRequest;
 
+    /** @var RequestSenderInterface */
+    private $requestSender;
+
     public function __construct(
         GenerateTokenByrdRequest $generateTokenRequest,
         CreateShipmentByrdRequest $createShipmentRequest,
-        FindProductByrdRequest $findProductByrdRequest
+        FindProductByrdRequest $findProductByrdRequest,
+        RequestSenderInterface $requestSender
     ) {
         $this->generateTokenRequest = $generateTokenRequest;
         $this->createShipmentRequest = $createShipmentRequest;
         $this->findProductByrdRequest = $findProductByrdRequest;
+        $this->requestSender = $requestSender;
     }
 
     public function createShipment(
@@ -49,7 +55,7 @@ final class ByrdHttpClient implements ByrdHttpClientInterface
 
         $this->createShipmentRequest->setOrder($order);
         $this->createShipmentRequest->setShippingGateway($shippingGateway);
-        $response = $this->createShipmentRequest->sendAuthorized($token);
+        $response = $this->requestSender->sendAuthorized($this->createShipmentRequest, $token);
 
         if ($response->getStatusCode() !== Response::HTTP_CREATED) {
             throw new \InvalidArgumentException("Something went wrong: ".$response->getContent());
@@ -64,7 +70,7 @@ final class ByrdHttpClient implements ByrdHttpClientInterface
             $gatewayConfig['api_secret'] ?? ""
         );
 
-        $response = $this->generateTokenRequest->send();
+        $response = $this->requestSender->send($this->generateTokenRequest);
 
         if ($response->getStatusCode() != Response::HTTP_CREATED) {
             throw new AuthorizationIssueException('Authorization issue');
@@ -84,7 +90,7 @@ final class ByrdHttpClient implements ByrdHttpClientInterface
 
         $this->findProductByrdRequest->setSearchField('q');
         $this->findProductByrdRequest->setByrdProductSku($sku);
-        $response = $this->findProductByrdRequest->sendAuthorized($token);
+        $response = $this->requestSender->sendAuthorized($this->findProductByrdRequest, $token);
         $response = json_decode($response->getContent());
         if (!$response->data) {
             return [];

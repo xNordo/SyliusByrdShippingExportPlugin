@@ -14,7 +14,7 @@ namespace BitBag\SyliusByrdShippingExportPlugin\Api\ByrdRequest;
 
 use Symfony\Component\HttpFoundation\Request;
 
-final class FindProductByrdRequest extends AbstractByrdRequest
+final class FindProductByrdRequest extends AbstractByrdRequest implements FindProductByrdRequestInterface
 {
     /** @var string */
     protected $requestMethod = Request::METHOD_GET;
@@ -38,7 +38,7 @@ final class FindProductByrdRequest extends AbstractByrdRequest
         $this->searchField = $searchField;
     }
 
-    public function buildRequest(): array
+    public function buildRequest(?string $authorizationToken): array
     {
         $this->requestUrl .= '?' . $this->searchField . '=' . $this->byrdProductSku;
 
