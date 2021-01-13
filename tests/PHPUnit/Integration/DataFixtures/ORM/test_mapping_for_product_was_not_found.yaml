@@ -1,0 +1,12 @@
+Sylius\Component\Core\Model\Product:
+  jacket:
+    code: "RANDOM_JACKET_CODE"
+    createdAt: "<date_create('2019-02-01 03:00:00')>"
+  coat:
+    code: "RANDOM_COAT_CODE"
+    createdAt: "<date_create('2019-02-01 03:00:00')>"
+
+BitBag\SyliusByrdShippingExportPlugin\Entity\ByrdProductMapping:
+  existingMapping:
+    product: "@coat"
+    byrdProductSku: "Byrd SKU"
