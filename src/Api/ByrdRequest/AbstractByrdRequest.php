@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace BitBag\SyliusByrdShippingExportPlugin\Api\ByrdRequest;
 
-abstract class AbstractByrdRequest
+abstract class AbstractByrdRequest implements AbstractByrdRequestInterface
 {
     /** @var string */
     protected $requestMethod;

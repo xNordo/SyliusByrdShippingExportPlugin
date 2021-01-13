@@ -18,4 +18,8 @@ use Symfony\Contracts\HttpClient\ResponseInterface;
 interface AbstractByrdRequestInterface
 {
     public function buildRequest(?string $authorizationToken): array;
+
+    public function getRequestMethod(): string;
+
+    public function getRequestUrl(): string;
 }
