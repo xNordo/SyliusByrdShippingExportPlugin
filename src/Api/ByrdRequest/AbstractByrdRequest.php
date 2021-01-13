@@ -53,7 +53,7 @@ abstract class AbstractByrdRequest implements AbstractByrdRequestInterface
             ]
         ];
 
-        if ($parameters !== null) {
+        if ($parameters !== null && count($parameters) > 0) {
             $request['body'] = json_encode($parameters);
         }
 
