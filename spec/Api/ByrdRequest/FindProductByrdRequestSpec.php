@@ -27,4 +27,30 @@ class FindProductByrdRequestSpec extends ObjectBehavior
     {
         $this->shouldHaveType(FindProductByrdRequest::class);
     }
+
+    function it_returns_get_request_method(): void
+    {
+        $this->getRequestMethod()->shouldReturn("GET");
+    }
+
+    function it_returns_request_url(): void
+    {
+        $this->getRequestUrl()->shouldReturn("http://byrd-api-fake-url/warehouse/products");
+    }
+
+    function it_builds_request_without_using_authorization_token(): void
+    {
+        $this->buildRequest("authorization-token")->shouldReturn(["headers" => [
+            "Accept" => "application/json",
+            "Content-Type" => "application/json",
+        ]]);
+    }
+
+    function it_accepts_nullable_authorization_token(): void
+    {
+        $this->buildRequest(null)->shouldReturn(["headers" => [
+            "Accept" => "application/json",
+            "Content-Type" => "application/json",
+        ]]);
+    }
 }

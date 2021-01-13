@@ -59,6 +59,16 @@ class CreateShipmentByrdRequestSpec extends ObjectBehavior
         $this->shouldHaveType(CreateShipmentByrdRequest::class);
     }
 
+    function it_returns_get_request_method(): void
+    {
+        $this->getRequestMethod()->shouldReturn("POST");
+    }
+
+    function it_returns_request_url(): void
+    {
+        $this->getRequestUrl()->shouldReturn("http://byrd-api-fake-url/shipments");
+    }
+
     function it_returns_request_with_automatching_by_sku_turned_on(
         OrderInterface $order,
         AddressInterface $shippingAddress,

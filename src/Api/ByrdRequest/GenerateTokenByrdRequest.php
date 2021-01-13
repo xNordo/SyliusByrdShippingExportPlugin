@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace BitBag\SyliusByrdShippingExportPlugin\Api\ByrdRequest;
 
+use BitBag\SyliusByrdShippingExportPlugin\Api\Exception\InvalidCredentialsException;
 use Symfony\Component\HttpFoundation\Request;
 
 final class GenerateTokenByrdRequest extends AbstractByrdRequest implements GenerateTokenByrdRequestInterface
@@ -36,6 +37,10 @@ final class GenerateTokenByrdRequest extends AbstractByrdRequest implements Gene
 
     public function buildRequest(?string $authorizationToken): array
     {
+        if ($this->username === null && $this->password === null) {
+            throw new InvalidCredentialsException("You have to set up credentials via setCredentials(...) method");
+        }
+
         $body = [
             'username' => $this->username,
             'password' => $this->password,

@@ -37,7 +37,7 @@ final class ByrdExtension extends AbstractExtension
     {
         $gateway = $this->shippingGatewayRepository->findOneByCode('byrd');
         if (!$gateway) {
-            return true;
+            return false;
         }
 
         $config = $gateway->getConfig();
