@@ -36,7 +36,7 @@ final class ByrdExtension extends AbstractExtension
     public function isAutoMappingState(): bool
     {
         $gateway = $this->shippingGatewayRepository->findOneByCode('byrd');
-        if (!$gateway) {
+        if ($gateway === null) {
             return false;
         }
 

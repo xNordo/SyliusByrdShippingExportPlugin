@@ -51,7 +51,7 @@ class RequestSender implements RequestSenderInterface
     }
 
     protected function addAuthorizationToken(
-        array $request = null,
+        array $request,
         ?string $token = null
     ): array {
         if ($token !== null) {

@@ -15,11 +15,14 @@ namespace BitBag\SyliusByrdShippingExportPlugin\EventListener;
 use BitBag\SyliusByrdShippingExportPlugin\Api\Client\ByrdHttpClientInterface;
 use BitBag\SyliusByrdShippingExportPlugin\Api\Exception\ByrdApiException;
 use BitBag\SyliusShippingExportPlugin\Entity\ShippingExportInterface;
+use BitBag\SyliusShippingExportPlugin\Entity\ShippingGatewayInterface;
 use BitBag\SyliusShippingExportPlugin\Event\ExportShipmentEvent;
 use BitBag\SyliusShippingExportPlugin\Repository\ShippingExportRepositoryInterface;
 use BitBag\SyliusShippingExportPlugin\Repository\ShippingGatewayRepositoryInterface;
 use Doctrine\ORM\EntityManagerInterface;
+use Sylius\Component\Core\Model\OrderInterface;
 use Sylius\Component\Core\Model\PaymentInterface;
+use Sylius\Component\Core\Model\ShipmentInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Translation\TranslatorInterface;
@@ -72,15 +75,22 @@ final class ShippingExportEventListener
 
     public function exportShipment(ExportShipmentEvent $exportShipmentEvent): void
     {
+        /** @var ShippingExportInterface $shippingExport */
         $shippingExport = $exportShipmentEvent->getShippingExport();
+
+        /** @var ShipmentInterface $shipping */
         $shipping = $shippingExport->getShipment();
+
+        /** @var OrderInterface $order */
         $order = $shipping->getOrder();
+
+        /** @var ShippingGatewayInterface $shipmentGateway */
         $shipmentGateway = $shippingExport->getShippingGateway();
 
         try {
             $this->byrdHttpClient->createShipment($order, $shipmentGateway);
         } catch (ByrdApiException $e) {
-            $exportShipmentEvent->getShippingExport()->setState('failed');
+            $shippingExport->setState('failed');
             $this->entityManager->flush();
 
             $exportShipmentEvent->addErrorFlash(
@@ -95,25 +105,30 @@ final class ShippingExportEventListener
 
     public function autoExport(PaymentInterface $payment): void
     {
+        /** @var ShippingGatewayInterface|null $byrdGateway */
         $byrdGateway = $this->shippingGatewayRepository->findOneByCode('byrd');
-        if (!$byrdGateway) {
+        if ($byrdGateway === null) {
             return;
         }
 
+        /** @var array $config */
         $config = $byrdGateway->getConfig();
         if (!isset($config['auto_export']) || !$config['auto_export']) {
             return;
         }
 
+        /** @var OrderInterface $order */
         $order = $payment->getOrder();
+
+        /** @var ShipmentInterface $shipment */
         $shipment = $order->getShipments()->first();
 
-        /** @var ShippingExportInterface $exportObject */
+        /** @var ShippingExportInterface|null $exportObject */
         $exportObject = $this->shippingExportRepository->findOneBy([
             'shipment' => $shipment->getId(),
         ]);
 
-        if (!$exportObject) {
+        if ($exportObject === null) {
             return;
         }
 

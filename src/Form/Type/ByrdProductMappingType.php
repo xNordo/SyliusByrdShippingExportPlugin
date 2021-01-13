@@ -59,7 +59,7 @@ final class ByrdProductMappingType extends AbstractType
                     return;
                 }
 
-                if (empty($event->getData()->getByrdProductSku())) {
+                if ($event->getData()->getByrdProductSku() === null || $event->getData()->getByrdProductSku() === "") {
                     $event->getForm()->addError(new FormError(
                         $this->translator->trans("bitbag_sylius_byrd_shipping_export_plugin.ui.form.error.sku_is_required")
                     ));

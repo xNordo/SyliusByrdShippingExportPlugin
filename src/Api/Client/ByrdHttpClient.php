@@ -12,7 +12,10 @@ declare(strict_types=1);
 
 namespace BitBag\SyliusByrdShippingExportPlugin\Api\Client;
 
+use BitBag\SyliusByrdShippingExportPlugin\Api\ByrdRequest\CreateShipmentByrdRequestInterface;
 use BitBag\SyliusByrdShippingExportPlugin\Api\ByrdRequest\FindProductByrdRequest;
+use BitBag\SyliusByrdShippingExportPlugin\Api\ByrdRequest\FindProductByrdRequestInterface;
+use BitBag\SyliusByrdShippingExportPlugin\Api\ByrdRequest\GenerateTokenByrdRequestInterface;
 use BitBag\SyliusByrdShippingExportPlugin\Api\Exception\AuthorizationIssueException;
 use BitBag\SyliusByrdShippingExportPlugin\Api\ByrdRequest\CreateShipmentByrdRequest;
 use BitBag\SyliusByrdShippingExportPlugin\Api\ByrdRequest\GenerateTokenByrdRequest;
@@ -20,16 +23,17 @@ use BitBag\SyliusByrdShippingExportPlugin\Api\RequestSenderInterface;
 use BitBag\SyliusShippingExportPlugin\Entity\ShippingGatewayInterface;
 use Sylius\Component\Core\Model\OrderInterface;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Contracts\HttpClient\ResponseInterface;
 
 final class ByrdHttpClient implements ByrdHttpClientInterface
 {
-    /** @var GenerateTokenByrdRequest */
+    /** @var GenerateTokenByrdRequestInterface */
     private $generateTokenRequest;
 
-    /** @var CreateShipmentByrdRequest */
+    /** @var CreateShipmentByrdRequestInterface */
     private $createShipmentRequest;
 
-    /** @var FindProductByrdRequest */
+    /** @var FindProductByrdRequestInterface */
     private $findProductByrdRequest;
 
     /** @var RequestSenderInterface */
@@ -89,10 +93,12 @@ final class ByrdHttpClient implements ByrdHttpClientInterface
         $token = $this->receiveAuthorizationToken($shippingGateway);
 
         $this->findProductByrdRequest->setSearchField('q');
-        $this->findProductByrdRequest->setByrdProductSku($sku);
+        $this->findProductByrdRequest->setByrdProductSku((string)$sku);
+
+        /** @var ResponseInterface $response */
         $response = $this->requestSender->sendAuthorized($this->findProductByrdRequest, $token);
         $response = json_decode($response->getContent());
-        if (!$response->data) {
+        if (!is_array($response->data) || count($response->data) === 0) {
             return [];
         }
 

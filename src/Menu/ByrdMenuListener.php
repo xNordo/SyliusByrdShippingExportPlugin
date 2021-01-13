@@ -12,13 +12,17 @@ declare(strict_types=1);
 
 namespace BitBag\SyliusByrdShippingExportPlugin\Menu;
 
+use Knp\Menu\ItemInterface;
 use Sylius\Bundle\UiBundle\Menu\Event\MenuBuilderEvent;
 
 final class ByrdMenuListener
 {
     public function buildMenu(MenuBuilderEvent $menuBuilderEvent): void
     {
+        /** @var ItemInterface $menu */
         $menu = $menuBuilderEvent->getMenu();
+
+        /** @var ItemInterface $menu */
         $menu = $menu->getChild('catalog');
 
         $menu->addChild('byrd', [

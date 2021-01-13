@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace BitBag\SyliusByrdShippingExportPlugin\Controller;
 
 use BitBag\SyliusByrdShippingExportPlugin\Api\Client\ByrdHttpClientInterface;
+use BitBag\SyliusShippingExportPlugin\Entity\ShippingGatewayInterface;
 use BitBag\SyliusShippingExportPlugin\Repository\ShippingGatewayRepositoryInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -36,8 +37,9 @@ final class FilterByrdProducts
 
     public function __invoke(Request $request): Response
     {
+        /** @var ShippingGatewayInterface|null $gateway */
         $gateway = $this->shippingGatewayRepository->findOneByCode('byrd');
-        if (!$gateway) {
+        if ($gateway === null) {
             return new Response('[]');
         }
 

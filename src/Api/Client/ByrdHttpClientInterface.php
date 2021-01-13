@@ -21,4 +21,9 @@ interface ByrdHttpClientInterface
         OrderInterface $order,
         ShippingGatewayInterface $shippingGateway
     ): void;
+
+    public function filterProductsBySku(
+        ?string $sku,
+        ShippingGatewayInterface $shippingGateway
+    ): array;
 }
