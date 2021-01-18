@@ -20,6 +20,12 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 final class ShippingGatewayType extends AbstractType
 {
+    private const OPTION_STANDARD = 'standard';
+
+    private const OPTION_EXPRESS = 'express';
+
+    private const OPTION_ECONOMY = 'economy';
+
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
@@ -33,9 +39,9 @@ final class ShippingGatewayType extends AbstractType
                 'label' => 'bitbag_sylius_byrd_shipping_export_plugin.ui.shipping_option',
                 'required' => true,
                 'choices' => [
-                    'bitbag_sylius_byrd_shipping_export_plugin.ui.shipping_option_type.standard' => 'standard',
-                    'bitbag_sylius_byrd_shipping_export_plugin.ui.shipping_option_type.express' => 'express',
-                    'bitbag_sylius_byrd_shipping_export_plugin.ui.shipping_option_type.economy' => 'economy',
+                    'bitbag_sylius_byrd_shipping_export_plugin.ui.shipping_option_type.standard' => self::OPTION_STANDARD,
+                    'bitbag_sylius_byrd_shipping_export_plugin.ui.shipping_option_type.express' => self::OPTION_EXPRESS,
+                    'bitbag_sylius_byrd_shipping_export_plugin.ui.shipping_option_type.economy' => self::OPTION_ECONOMY,
                 ],
                 'multiple' => false,
             ])

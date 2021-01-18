@@ -89,7 +89,9 @@ final class CreateShipmentByrdRequest extends AbstractByrdRequest implements Cre
     public function buildRequest(?string $authorizationToken): array
     {
         if ($this->shippingGateway === null) {
-            throw new NoShippingGatewayAttachedException("You have to set up shippingGateway via setShippingGateway(...) method");
+            throw new NoShippingGatewayAttachedException(
+                "You have to set up shippingGateway via setShippingGateway(...) method"
+            );
         }
 
         if ($this->order === null) {
@@ -153,7 +155,7 @@ final class CreateShipmentByrdRequest extends AbstractByrdRequest implements Cre
             }
 
             $sku = $product->getCode();
-            if (!$this->autoMatchBySku()) {
+            if (!$this->shouldAutoMatchBySku()) {
                 /** @var ByrdProductMappingInterface|null $byrdMapping */
                 $byrdMapping = $this->byrdProductMappingRepository->findForProduct($product);
                 if ($byrdMapping === null) {
@@ -173,7 +175,7 @@ final class CreateShipmentByrdRequest extends AbstractByrdRequest implements Cre
         return $shipmentItems;
     }
 
-    private function autoMatchBySku(): bool
+    private function shouldAutoMatchBySku(): bool
     {
         if ($this->shippingGateway === null) {
             return false;
@@ -189,8 +191,7 @@ final class CreateShipmentByrdRequest extends AbstractByrdRequest implements Cre
         string $byrdProductSku,
         int $quantity,
         string $authorizationToken
-    ): array
-    {
+    ): array {
         $byrdProduct = $this->fetchByrdProductInformation($byrdProductSku, $authorizationToken);
 
         return [
@@ -202,13 +203,15 @@ final class CreateShipmentByrdRequest extends AbstractByrdRequest implements Cre
         ];
     }
 
-    private function fetchByrdProductInformation(string $byrdProductSku, string $authorizationToken): ByrdProduct
-    {
+    private function fetchByrdProductInformation(
+        string $byrdProductSku,
+        string $authorizationToken
+    ): ByrdProduct {
         $this->findProductRequest->setByrdProductSku($byrdProductSku);
         $response = $this->requestSender->sendAuthorized($this->findProductRequest, $authorizationToken);
 
         $content = json_decode($response->getContent());
-        if (is_array($content->data) && count($content->data) === 0) {
+        if (isset($content->data) && is_array($content->data) && count($content->data) === 0) {
             throw new ProductNotFoundException('Product with SKU: ' . $byrdProductSku . ' was not found');
         }
         $product = current($content->data);

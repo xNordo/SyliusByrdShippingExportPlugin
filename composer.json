@@ -20,7 +20,6 @@
     ],
     "require": {
         "php": "^7.3",
-
         "sylius/sylius": "^1.8",
         "bitbag/shipping-export-plugin": "^1.3"
     },

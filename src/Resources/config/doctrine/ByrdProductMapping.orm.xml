@@ -7,10 +7,10 @@
 >
     <mapped-superclass name="BitBag\SyliusByrdShippingExportPlugin\Entity\ByrdProductMapping" table="bitbag_byrd_product_mapping">
         <id name="id" column="id" type="integer">
-            <generator strategy="AUTO"/>
+            <generator strategy="AUTO" />
         </id>
 
-        <field name="byrdProductSku" column="byrd_product_sku" type="string" unique="true"/>
+        <field name="byrdProductSku" column="byrd_product_sku" type="string" unique="true" />
 
         <one-to-one field="product" target-entity="Sylius\Component\Core\Model\ProductInterface" />
 

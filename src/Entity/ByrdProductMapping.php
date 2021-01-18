@@ -19,10 +19,10 @@ class ByrdProductMapping implements ByrdProductMappingInterface
     /** @var int|null */
     protected $id;
 
-    /** @var ?ProductInterface */
+    /** @var ProductInterface|null */
     protected $product;
 
-    /** @var ?string */
+    /** @var string|null */
     protected $byrdProductSku;
 
     public function getId(): ?int

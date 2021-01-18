@@ -1,15 +1,20 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
     <imports>
         <import resource="services/**/*.xml" />
     </imports>
     <services>
-        <service id="bitbag.byrd_shipping_export_plugin.form.type.byrd_shipping_gateway" class="BitBag\SyliusByrdShippingExportPlugin\Form\Type\ShippingGatewayType">
+        <service id="bitbag.byrd_shipping_export_plugin.form.type.byrd_shipping_gateway"
+                 class="BitBag\SyliusByrdShippingExportPlugin\Form\Type\ShippingGatewayType">
             <tag name="bitbag.shipping_gateway_configuration_type" type="byrd" label="Byrd" />
         </service>
 
-        <service id="bitbag.byrd_shipping_export_plugin.event_listener.byrd_shipping_export" class="BitBag\SyliusByrdShippingExportPlugin\EventListener\ShippingExportEventListener" public="true">
+        <service id="bitbag.byrd_shipping_export_plugin.event_listener.byrd_shipping_export"
+                 class="BitBag\SyliusByrdShippingExportPlugin\EventListener\ShippingExportEventListener" public="true">
             <argument type="service" id="bitbag.byrd_shipping_export_plugin.api.byrd_http_client" />
             <argument type="service" id="doctrine.orm.entity_manager" />
             <argument type="service" id="bitbag.repository.shipping_export" />

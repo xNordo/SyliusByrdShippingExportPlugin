@@ -12,9 +12,6 @@ declare(strict_types=1);
 
 namespace BitBag\SyliusByrdShippingExportPlugin\Api\ByrdRequest;
 
-use Symfony\Contracts\HttpClient\HttpClientInterface;
-use Symfony\Contracts\HttpClient\ResponseInterface;
-
 interface AbstractByrdRequestInterface
 {
     public function buildRequest(?string $authorizationToken): array;

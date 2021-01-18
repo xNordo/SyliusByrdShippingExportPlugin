@@ -30,19 +30,11 @@ final class AutocompleteChoiceType extends AbstractType
         $this->urlGenerator = $urlGenerator;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
 
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @psalm-suppress MissingPropertyType
-     */
     public function buildView(FormView $view, FormInterface $form, array $options): void
     {
         $view->vars['multiple'] = $options['multiple'];
@@ -53,13 +45,15 @@ final class AutocompleteChoiceType extends AbstractType
         $view->vars['remote_criteria_type'] = 'contains';
         $view->vars['remote_criteria_name'] = 'sku';
 
-        $view->vars['remote_url'] = $this->urlGenerator->generate('sylius_byrd_shipping_export_plugin_filter_byrd_products');
-        $view->vars['load_edit_url'] = $this->urlGenerator->generate('sylius_byrd_shipping_export_plugin_filter_byrd_products');
+        $view->vars['remote_url'] = $this->urlGenerator->generate(
+            'sylius_byrd_shipping_export_plugin_filter_byrd_products'
+        );
+
+        $view->vars['load_edit_url'] = $this->urlGenerator->generate(
+            'sylius_byrd_shipping_export_plugin_filter_byrd_products'
+        );
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver
@@ -79,17 +73,11 @@ final class AutocompleteChoiceType extends AbstractType
         ;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getParent(): string
     {
         return HiddenType::class;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getBlockPrefix(): string
     {
         return 'sylius_resource_autocomplete_choice';

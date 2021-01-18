@@ -15,7 +15,6 @@ namespace BitBag\SyliusByrdShippingExportPlugin\Form\Type;
 use BitBag\SyliusByrdShippingExportPlugin\Repository\ByrdProductMappingRepositoryInterface;
 use Sylius\Bundle\ProductBundle\Form\Type\ProductAutocompleteChoiceType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormEvent;
@@ -54,34 +53,45 @@ final class ByrdProductMappingType extends AbstractType
             ->addEventListener(FormEvents::SUBMIT, function (FormEvent $event): void {
                 if (!$event->getData()->getProduct()) {
                     $event->getForm()->addError(new FormError(
-                        $this->translator->trans("bitbag_sylius_byrd_shipping_export_plugin.ui.form.error.product_is_required")
+                        $this->translator->trans(
+                            "bitbag_sylius_byrd_shipping_export_plugin.ui.form.error.product_is_required"
+                        )
                     ));
+
                     return;
                 }
 
                 if ($event->getData()->getByrdProductSku() === null || $event->getData()->getByrdProductSku() === "") {
                     $event->getForm()->addError(new FormError(
-                        $this->translator->trans("bitbag_sylius_byrd_shipping_export_plugin.ui.form.error.sku_is_required")
+                        $this->translator->trans(
+                            "bitbag_sylius_byrd_shipping_export_plugin.ui.form.error.sku_is_required"
+                        )
                     ));
+
                     return;
                 }
 
                 $existingMapping = $this->byrdProductMappingRepository->findOneBy([
                     'product' => $event->getData()->getProduct()->getId()
                 ]);
-                if ($existingMapping && $existingMapping->getId() != $event->getForm()->getData()->getId()) {
+                if ($existingMapping && $existingMapping->getId() !== $event->getForm()->getData()->getId()) {
                     $event->getForm()->addError(new FormError(
-                        $this->translator->trans("bitbag_sylius_byrd_shipping_export_plugin.ui.form.error.product_already_in_use")
+                        $this->translator->trans(
+                            "bitbag_sylius_byrd_shipping_export_plugin.ui.form.error.product_already_in_use"
+                        )
                     ));
+
                     return;
                 }
 
                 $existingMapping = $this->byrdProductMappingRepository->findOneBy([
                     'byrdProductSku' => $event->getData()->getByrdProductSku()
                 ]);
-                if ($existingMapping && $existingMapping->getId() != $event->getForm()->getData()->getId()) {
+                if ($existingMapping && $existingMapping->getId() !== $event->getForm()->getData()->getId()) {
                     $event->getForm()->addError(new FormError(
-                        $this->translator->trans("bitbag_sylius_byrd_shipping_export_plugin.ui.form.error.sku_already_in_use")
+                        $this->translator->trans(
+                            "bitbag_sylius_byrd_shipping_export_plugin.ui.form.error.sku_already_in_use"
+                        )
                     ));
                 }
             })

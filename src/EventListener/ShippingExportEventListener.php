@@ -78,17 +78,17 @@ final class ShippingExportEventListener
         /** @var ShippingExportInterface $shippingExport */
         $shippingExport = $exportShipmentEvent->getShippingExport();
 
-        /** @var ShipmentInterface $shipping */
-        $shipping = $shippingExport->getShipment();
+        /** @var ShipmentInterface $shipment */
+        $shipment = $shippingExport->getShipment();
 
         /** @var OrderInterface $order */
-        $order = $shipping->getOrder();
+        $order = $shipment->getOrder();
 
-        /** @var ShippingGatewayInterface $shipmentGateway */
-        $shipmentGateway = $shippingExport->getShippingGateway();
+        /** @var ShippingGatewayInterface $shippingGateway */
+        $shippingGateway = $shippingExport->getShippingGateway();
 
         try {
-            $this->byrdHttpClient->createShipment($order, $shipmentGateway);
+            $this->byrdHttpClient->createShipment($order, $shippingGateway);
         } catch (ByrdApiException $e) {
             $shippingExport->setState('failed');
             $this->entityManager->flush();
@@ -96,6 +96,7 @@ final class ShippingExportEventListener
             $exportShipmentEvent->addErrorFlash(
                 sprintf("Byrd error for order %s: %s", $order->getNumber(), $e->getMessage())
             );
+            
             return;
         }
 

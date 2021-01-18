@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace BitBag\SyliusByrdShippingExportPlugin\Api;
 
-use BitBag\SyliusByrdShippingExportPlugin\Api\ByrdRequest\AbstractByrdRequest;
 use BitBag\SyliusByrdShippingExportPlugin\Api\ByrdRequest\AbstractByrdRequestInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;

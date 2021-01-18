@@ -6,7 +6,7 @@
 
 {% set header = configuration.vars.header|default(metadata.applicationName~'.ui.'~metadata.pluralName) %}
 
-{% block title %}AAAA{{ header|trans }} {{ parent() }}{% endblock %}
+{% block title %}{{ header|trans }} {{ parent() }}{% endblock %}
 
 {% block content %}
 {{ sonata_block_render_event(event_prefix ~ '.before_header', {'resources': resources}) }}
