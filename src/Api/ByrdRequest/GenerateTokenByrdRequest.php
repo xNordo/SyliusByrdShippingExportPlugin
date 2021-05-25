@@ -21,7 +21,7 @@ final class GenerateTokenByrdRequest extends AbstractByrdRequest implements Gene
     protected $requestMethod = Request::METHOD_POST;
 
     /** @var string */
-    protected $requestUrl = "/login";
+    protected $requestUrl = '/login';
 
     /** @var string|null */
     private $username;
@@ -38,7 +38,7 @@ final class GenerateTokenByrdRequest extends AbstractByrdRequest implements Gene
     public function buildRequest(?string $authorizationToken): array
     {
         if ($this->username === null && $this->password === null) {
-            throw new InvalidCredentialsException("You have to set up credentials via setCredentials(...) method");
+            throw new InvalidCredentialsException('You have to set up credentials via setCredentials(...) method');
         }
 
         $body = [

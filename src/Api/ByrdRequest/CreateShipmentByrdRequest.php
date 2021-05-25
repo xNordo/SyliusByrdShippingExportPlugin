@@ -51,13 +51,13 @@ final class CreateShipmentByrdRequest extends AbstractByrdRequest implements Cre
     protected $requestMethod = Request::METHOD_POST;
 
     /** @var string */
-    protected $requestUrl = "/shipments";
+    protected $requestUrl = '/shipments';
 
     /** @var OrderInterface|null */
-    private $order = null;
+    private $order;
 
-    /** @var ShippingGatewayInterface|null $shippingGateway */
-    private $shippingGateway = null;
+    /** @var ShippingGatewayInterface|null */
+    private $shippingGateway;
 
     public function __construct(
         ByrdProductMappingRepositoryInterface $byrdProductMappingRepository,
@@ -90,12 +90,12 @@ final class CreateShipmentByrdRequest extends AbstractByrdRequest implements Cre
     {
         if ($this->shippingGateway === null) {
             throw new NoShippingGatewayAttachedException(
-                "You have to set up shippingGateway via setShippingGateway(...) method"
+                'You have to set up shippingGateway via setShippingGateway(...) method'
             );
         }
 
         if ($this->order === null) {
-            throw new NoOrderAttachedException("You have to set up order via setOrder(...) method");
+            throw new NoOrderAttachedException('You have to set up order via setOrder(...) method');
         }
 
         if ($authorizationToken === null) {
@@ -129,14 +129,14 @@ final class CreateShipmentByrdRequest extends AbstractByrdRequest implements Cre
         $shippingAddress = $order->getShippingAddress();
 
         return [
-            "destinationName" => $shippingAddress->getFullName(),
-            "destinationPhone" => $shippingAddress->getPhoneNumber(),
-            "destinationEmail" => $customer->getEmailCanonical(),
-            "destinationCompany" => $shippingAddress->getCompany(),
-            "description" => $order->getNotes(),
-            "fragile" => false,
-            "option" => 'standard',
-            "status" => "new",
+            'destinationName' => $shippingAddress->getFullName(),
+            'destinationPhone' => $shippingAddress->getPhoneNumber(),
+            'destinationEmail' => $customer->getEmailCanonical(),
+            'destinationCompany' => $shippingAddress->getCompany(),
+            'description' => $order->getNotes(),
+            'fragile' => false,
+            'option' => 'standard',
+            'status' => 'new',
         ];
     }
 
@@ -166,7 +166,7 @@ final class CreateShipmentByrdRequest extends AbstractByrdRequest implements Cre
             }
 
             $shipmentItems[] = $this->createShipmentItem(
-                (string)$sku,
+                (string) $sku,
                 $item->getQuantity(),
                 $authorizationToken
             );
@@ -195,11 +195,11 @@ final class CreateShipmentByrdRequest extends AbstractByrdRequest implements Cre
         $byrdProduct = $this->fetchByrdProductInformation($byrdProductSku, $authorizationToken);
 
         return [
-            "amount" => $quantity,
-            "byrdProductID" => $byrdProduct->getId(),
-            "description" => $byrdProduct->getDescription(),
-            "productName" => $byrdProduct->getName(),
-            "sku" => $byrdProductSku,
+            'amount' => $quantity,
+            'byrdProductID' => $byrdProduct->getId(),
+            'description' => $byrdProduct->getDescription(),
+            'productName' => $byrdProduct->getName(),
+            'sku' => $byrdProductSku,
         ];
     }
 
@@ -229,10 +229,10 @@ final class CreateShipmentByrdRequest extends AbstractByrdRequest implements Cre
         $shippingAddress = $order->getShippingAddress();
 
         return [
-            "countryCode" => $shippingAddress->getCountryCode(),
-            "locality" => $shippingAddress->getCity(),
-            "postalCode" => $shippingAddress->getPostcode(),
-            "thoroughfare" => $shippingAddress->getStreet(),
+            'countryCode' => $shippingAddress->getCountryCode(),
+            'locality' => $shippingAddress->getCity(),
+            'postalCode' => $shippingAddress->getPostcode(),
+            'thoroughfare' => $shippingAddress->getStreet(),
         ];
     }
 

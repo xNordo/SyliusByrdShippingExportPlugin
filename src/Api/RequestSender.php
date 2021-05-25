@@ -54,7 +54,7 @@ class RequestSender implements RequestSenderInterface
         ?string $token = null
     ): array {
         if ($token !== null) {
-            $request['headers']['Authorization'] = 'Bearer '.$token;
+            $request['headers']['Authorization'] = 'Bearer ' . $token;
         }
 
         return $request;

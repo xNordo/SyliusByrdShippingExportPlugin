@@ -94,7 +94,7 @@ final class ShippingExportEventListener
             $this->entityManager->flush();
 
             $exportShipmentEvent->addErrorFlash(
-                sprintf("Byrd error for order %s: %s", $order->getNumber(), $e->getMessage())
+                sprintf('Byrd error for order %s: %s', $order->getNumber(), $e->getMessage())
             );
 
             return;
