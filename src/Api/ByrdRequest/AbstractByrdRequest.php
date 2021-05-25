@@ -62,6 +62,6 @@ abstract class AbstractByrdRequest implements AbstractByrdRequestInterface
 
     protected function createUrl(string $suffix): string
     {
-        return $this->apiUrl.$suffix;
+        return $this->apiUrl . $suffix;
     }
 }

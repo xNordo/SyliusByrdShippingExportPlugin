@@ -32,7 +32,6 @@ final class AutocompleteChoiceType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-
     }
 
     public function buildView(FormView $view, FormInterface $form, array $options): void

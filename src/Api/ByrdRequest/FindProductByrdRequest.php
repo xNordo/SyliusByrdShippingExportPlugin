@@ -20,7 +20,7 @@ final class FindProductByrdRequest extends AbstractByrdRequest implements FindPr
     protected $requestMethod = Request::METHOD_GET;
 
     /** @var string */
-    protected $requestUrl = "/warehouse/products";
+    protected $requestUrl = '/warehouse/products';
 
     /** @var string|null */
     private $byrdProductSku;

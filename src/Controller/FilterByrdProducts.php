@@ -44,6 +44,7 @@ final class FilterByrdProducts
         }
 
         $products = $this->byrdHttpClient->filterProductsBySku($request->query->get('sku'), $gateway);
+
         return new JsonResponse($products);
     }
 }

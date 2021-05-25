@@ -14,5 +14,4 @@ namespace BitBag\SyliusByrdShippingExportPlugin\Api\Exception;
 
 final class EmptyProductListException extends ByrdApiException
 {
-
 }

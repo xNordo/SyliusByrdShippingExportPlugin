@@ -54,17 +54,17 @@ final class ByrdProductMappingType extends AbstractType
                 if (!$event->getData()->getProduct()) {
                     $event->getForm()->addError(new FormError(
                         $this->translator->trans(
-                            "bitbag_sylius_byrd_shipping_export_plugin.ui.form.error.product_is_required"
+                            'bitbag_sylius_byrd_shipping_export_plugin.ui.form.error.product_is_required'
                         )
                     ));
 
                     return;
                 }
 
-                if ($event->getData()->getByrdProductSku() === null || $event->getData()->getByrdProductSku() === "") {
+                if ($event->getData()->getByrdProductSku() === null || $event->getData()->getByrdProductSku() === '') {
                     $event->getForm()->addError(new FormError(
                         $this->translator->trans(
-                            "bitbag_sylius_byrd_shipping_export_plugin.ui.form.error.sku_is_required"
+                            'bitbag_sylius_byrd_shipping_export_plugin.ui.form.error.sku_is_required'
                         )
                     ));
 
@@ -77,7 +77,7 @@ final class ByrdProductMappingType extends AbstractType
                 if ($existingMapping && $existingMapping->getId() !== $event->getForm()->getData()->getId()) {
                     $event->getForm()->addError(new FormError(
                         $this->translator->trans(
-                            "bitbag_sylius_byrd_shipping_export_plugin.ui.form.error.product_already_in_use"
+                            'bitbag_sylius_byrd_shipping_export_plugin.ui.form.error.product_already_in_use'
                         )
                     ));
 
@@ -90,7 +90,7 @@ final class ByrdProductMappingType extends AbstractType
                 if ($existingMapping && $existingMapping->getId() !== $event->getForm()->getData()->getId()) {
                     $event->getForm()->addError(new FormError(
                         $this->translator->trans(
-                            "bitbag_sylius_byrd_shipping_export_plugin.ui.form.error.sku_already_in_use"
+                            'bitbag_sylius_byrd_shipping_export_plugin.ui.form.error.sku_already_in_use'
                         )
                     ));
                 }

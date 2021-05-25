@@ -13,7 +13,7 @@ jobs:
   tests:
     runs-on: ubuntu-latest
 
-    name: "PHP ${{ matrix.php }}, MySQL ${{ matrix.mysql }}"
+    name: "PHP ${{ matrix.php }}, MySQL ${{ matrix.mysql }}, Sylius ${{matrix.sylius}}"
 
     strategy:
       fail-fast: false
@@ -21,6 +21,7 @@ jobs:
         php: [7.4, 7.3]
         node: [10.x]
         mysql: [5.7, 8.0]
+        sylius: [~1.8, ~1.9]
 
         exclude:
           - # PHP 7.3 does not support "caching_sha2_password" authentication plugin which is a default one in MySQL 8.0
@@ -102,6 +103,10 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-php-${{ matrix.php }}-composer-
       -
+        name: Add Sylius requirement
+        run: composer require sylius/sylius:${{ matrix.sylius }}
+
+      -
         name: Install PHP dependencies
         run: composer install --no-interaction
 
@@ -160,15 +165,3 @@ jobs:
         name: Run PHPUnit
         run: vendor/bin/phpunit --colors=always
 
-      -
-        name: Run Behat
-        run: vendor/bin/behat --colors --strict -vvv --no-interaction || vendor/bin/behat --colors --strict -vvv --no-interaction --rerun
-
-      -
-        name: Upload Behat logs
-        uses: actions/upload-artifact@v2
-        if: failure()
-        with:
-          name: Behat logs
-          path: etc/build/
-          if-no-files-found: ignore

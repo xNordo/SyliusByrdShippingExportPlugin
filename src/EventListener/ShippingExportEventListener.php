@@ -25,7 +25,7 @@ use Sylius\Component\Core\Model\PaymentInterface;
 use Sylius\Component\Core\Model\ShipmentInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class ShippingExportEventListener
 {
@@ -94,9 +94,9 @@ final class ShippingExportEventListener
             $this->entityManager->flush();
 
             $exportShipmentEvent->addErrorFlash(
-                sprintf("Byrd error for order %s: %s", $order->getNumber(), $e->getMessage())
+                sprintf('Byrd error for order %s: %s', $order->getNumber(), $e->getMessage())
             );
-            
+
             return;
         }
 

@@ -33,6 +33,7 @@ final class ByrdProductMappingRepository extends IntegrationTestCase
 
     public function test_mapping_for_product_was_found(): void
     {
+        self::ensureKernelShutdown();
         $this->loadFixturesFromFiles(['test_mapping_for_product_was_found.yaml']);
 
         $product = $this->productRepository->findOneByCode('RANDOM_JACKET_CODE');
@@ -44,6 +45,7 @@ final class ByrdProductMappingRepository extends IntegrationTestCase
 
     public function test_mapping_for_product_was_not_found(): void
     {
+        self::ensureKernelShutdown();
         $this->loadFixturesFromFiles(['test_mapping_for_product_was_not_found.yaml']);
 
         $product = $this->productRepository->findOneByCode('RANDOM_JACKET_CODE');

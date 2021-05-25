@@ -5,4 +5,3 @@ bitbag_sylius_shipping_export_plugin:
 bitbag_sylius_byrd_shipping_export_plugin:
     resource: "@BitBagByrdShippingExportPlugin/Resources/config/routing.yaml"
     prefix: /admin
-

@@ -14,5 +14,4 @@ namespace BitBag\SyliusByrdShippingExportPlugin\Api\Exception;
 
 class ByrdApiException extends \RuntimeException
 {
-
 }

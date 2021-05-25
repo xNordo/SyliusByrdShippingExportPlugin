@@ -12,13 +12,13 @@ declare(strict_types=1);
 
 namespace BitBag\SyliusByrdShippingExportPlugin\Api\Client;
 
+use BitBag\SyliusByrdShippingExportPlugin\Api\ByrdRequest\CreateShipmentByrdRequest;
 use BitBag\SyliusByrdShippingExportPlugin\Api\ByrdRequest\CreateShipmentByrdRequestInterface;
 use BitBag\SyliusByrdShippingExportPlugin\Api\ByrdRequest\FindProductByrdRequest;
 use BitBag\SyliusByrdShippingExportPlugin\Api\ByrdRequest\FindProductByrdRequestInterface;
+use BitBag\SyliusByrdShippingExportPlugin\Api\ByrdRequest\GenerateTokenByrdRequest;
 use BitBag\SyliusByrdShippingExportPlugin\Api\ByrdRequest\GenerateTokenByrdRequestInterface;
 use BitBag\SyliusByrdShippingExportPlugin\Api\Exception\AuthorizationIssueException;
-use BitBag\SyliusByrdShippingExportPlugin\Api\ByrdRequest\CreateShipmentByrdRequest;
-use BitBag\SyliusByrdShippingExportPlugin\Api\ByrdRequest\GenerateTokenByrdRequest;
 use BitBag\SyliusByrdShippingExportPlugin\Api\RequestSenderInterface;
 use BitBag\SyliusShippingExportPlugin\Entity\ShippingGatewayInterface;
 use Sylius\Component\Core\Model\OrderInterface;
@@ -62,7 +62,7 @@ final class ByrdHttpClient implements ByrdHttpClientInterface
         $response = $this->requestSender->sendAuthorized($this->createShipmentRequest, $token);
 
         if ($response->getStatusCode() !== Response::HTTP_CREATED) {
-            throw new \InvalidArgumentException("Something went wrong: ".$response->getContent());
+            throw new \InvalidArgumentException('Something went wrong: ' . $response->getContent());
         }
     }
 
@@ -70,8 +70,8 @@ final class ByrdHttpClient implements ByrdHttpClientInterface
     {
         $gatewayConfig = $shippingGateway->getConfig();
         $this->generateTokenRequest->setCredentials(
-            $gatewayConfig['api_key'] ?? "",
-            $gatewayConfig['api_secret'] ?? ""
+            $gatewayConfig['api_key'] ?? '',
+            $gatewayConfig['api_secret'] ?? ''
         );
 
         $response = $this->requestSender->send($this->generateTokenRequest);
@@ -93,7 +93,7 @@ final class ByrdHttpClient implements ByrdHttpClientInterface
         $token = $this->receiveAuthorizationToken($shippingGateway);
 
         $this->findProductByrdRequest->setSearchField('q');
-        $this->findProductByrdRequest->setByrdProductSku((string)$sku);
+        $this->findProductByrdRequest->setByrdProductSku((string) $sku);
 
         /** @var ResponseInterface $response */
         $response = $this->requestSender->sendAuthorized($this->findProductByrdRequest, $token);
@@ -105,7 +105,7 @@ final class ByrdHttpClient implements ByrdHttpClientInterface
         $products = [];
         foreach ($response->data as $key => $value) {
             $products[] = [
-                'name' => sprintf("%s (SKU: %s)", $value->name, $value->sku),
+                'name' => sprintf('%s (SKU: %s)', $value->name, $value->sku),
                 'sku' => $value->sku,
             ];
         }
