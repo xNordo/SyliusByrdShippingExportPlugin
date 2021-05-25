@@ -2,7 +2,7 @@ app_admin_byrd_product_mapping:
   resource: |
     alias: bitbag_sylius_byrd_shipping_export_plugin.byrd_product_mapping
     section: admin
-    templates: BitBagByrdShippingExportPlugin:CrudUi
+    templates: "@BitBagByrdShippingExportPlugin/CrudUi"
     except: ['show']
     grid: bitbag_sylius_byrd_shipping_export__admin__byrd_product_mapping
     redirect: index
