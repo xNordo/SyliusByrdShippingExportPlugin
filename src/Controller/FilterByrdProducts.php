@@ -43,7 +43,7 @@ final class FilterByrdProducts
             return new Response('[]');
         }
 
-        $products = $this->byrdHttpClient->filterProductsBySku($request->query->get('sku'), $gateway);
+        $products = $this->byrdHttpClient->filterProductsBySku((string) $request->query->get('sku'), $gateway);
 
         return new JsonResponse($products);
     }
