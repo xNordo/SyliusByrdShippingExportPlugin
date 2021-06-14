@@ -15,7 +15,7 @@
 
         <service id="bitbag.byrd_shipping_export_plugin.api.request_sender"
                  class="BitBag\SyliusByrdShippingExportPlugin\Api\RequestSender">
-            <argument type="service" id="sylius.http_client" />
+            <argument type="service" id="http_client" />
         </service>
 
         <service id="bitbag.byrd_shipping_export_plugin.api.byrd_request.generate_token"
