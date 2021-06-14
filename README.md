@@ -1,10 +1,16 @@
-# [![](https://bitbag.io/wp-content/uploads/2021/06/ByrdShippingExport.png)](https://bitbag.io/contact-us/?utm_source=github&utm_medium=referral&utm_campaign=byrd-shipping-export-plugin)
+# [![](https://bitbag.io/wp-content/uploads/2021/06/SyliusByrdShippingExportPlugin.png)](https://bitbag.io/contact-us/?utm_source=github&utm_medium=referral&utm_campaign=byrd-shipping-export-plugin)
 
 # BitBag SyliusByrdShippingExportPlugin
 
 ----
 
-[![](https://img.shields.io/packagist/l/byrd-shipping-export-plugin-plugin.svg) ](https://packagist.org/packages/byrd-shipping-export-plugin-plugin "License") [ ![](https://img.shields.io/packagist/v/byrd-shipping-export-plugin-plugin.svg) ](https://packagist.org/packages/bitbag/byrd-shipping-export-plugin "Version") [ ![](https://img.shields.io/travis/BitBagCommerce/SyliusByrdShippingExportPlugin/master.svg) ](http://travis-ci.org/BitBagCommerce/SyliusByrdShippingExportPlugin "Build status") [ ![](https://img.shields.io/scrutinizer/g/BitBagCommerce/SyliusByrdShippingExportPlugin.svg) ](https://scrutinizer-ci.com/g/BitBagCommerce/SyliusByrdShippingExportPlugin/ "Scrutinizer") [![](https://poser.pugx.org/bitbag/byrd-shipping-export-plugin/downloads)](https://packagist.org/packages/bitbag/byrd-shipping-export-plugin "Total Downloads") [![Slack](https://img.shields.io/badge/community%20chat-slack-FF1493.svg)](http://sylius-devs.slack.com) [![Support](https://img.shields.io/badge/support-contact%20author-blue])](https://bitbag.io/contact-us/?utm_source=github&utm_medium=referral&utm_campaign=plugins_byrd-shipping-export)
+[![](https://img.shields.io/packagist/l/bitbag/byrd-shipping-export-plugin.svg) ](https://packagist.org/packages/bitbag/byrd-shipping-export-plugin "License") 
+[![](https://img.shields.io/packagist/v/bitbag/byrd-shipping-export-plugin.svg) ](https://packagist.org/packages/bitbag/byrd-shipping-export-plugin "Version") 
+[![](https://img.shields.io/github/workflow/status/BitBagCommerce/SyliusByrdShippingExportPlugin/Build) ](https://github.com/BitBagCommerce/SyliusByrdShippingExportPlugin/actions "Build status") 
+[![](https://img.shields.io/scrutinizer/g/BitBagCommerce/SyliusByrdShippingExportPlugin.svg) ](https://scrutinizer-ci.com/g/BitBagCommerce/SyliusByrdShippingExportPlugin/ "Scrutinizer") 
+[![](https://poser.pugx.org/bitbag/byrd-shipping-export-plugin/downloads)](https://packagist.org/packages/bitbag/byrd-shipping-export-plugin "Total Downloads") 
+[![Slack](https://img.shields.io/badge/community%20chat-slack-FF1493.svg)](http://sylius-devs.slack.com) 
+[![Support](https://img.shields.io/badge/support-contact%20author-blue])](https://bitbag.io/contact-us/?utm_source=github&utm_medium=referral&utm_campaign=plugins_byrd-shipping-export)
 
 At BitBag we do believe in open source. However, we are able to do it just because of our awesome clients, who are kind enough to share some parts of our work with the community. Therefore, if you feel like there is a possibility for us working together, feel free to reach us out. You will find out more about our professional services, technologies and contact details at [https://bitbag.io/](https://bitbag.io/contact-us/?utm_source=github&utm_medium=referral&utm_campaign=plugins_byrd-shipping-export).
 
