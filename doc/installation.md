@@ -35,9 +35,9 @@ imports:
     prefix: /admin
 ```
 
-Apply migration to your database
+Update your database schema
 ```bash
-bin/console doctrine:migrations:migrate
+bin/console doctrine:schema:update
 ```
 
 **Note:** If you are running it on production, add the `-e prod` flag to this command.
