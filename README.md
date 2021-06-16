@@ -1,112 +1,118 @@
-<p align="center">
-    <a href="https://sylius.com" target="_blank">
-        <img src="https://demo.sylius.com/assets/shop/img/logo.png" />
-    </a>
-</p>
+# [![](https://bitbag.io/wp-content/uploads/2021/06/SyliusByrdShippingExportPlugin.png)](https://bitbag.io/contact-us/?utm_source=github&utm_medium=referral&utm_campaign=byrd-shipping-export-plugin)
 
-<h1 align="center">Plugin Skeleton</h1>
+# BitBag SyliusByrdShippingExportPlugin
 
-<p align="center">Skeleton for starting Sylius plugins.</p>
+----
 
-## Documentation
+[![](https://img.shields.io/packagist/l/bitbag/byrd-shipping-export-plugin.svg) ](https://packagist.org/packages/bitbag/byrd-shipping-export-plugin "License") 
+[![](https://img.shields.io/packagist/v/bitbag/byrd-shipping-export-plugin.svg) ](https://packagist.org/packages/bitbag/byrd-shipping-export-plugin "Version") 
+[![](https://img.shields.io/github/workflow/status/BitBagCommerce/SyliusByrdShippingExportPlugin/Build) ](https://github.com/BitBagCommerce/SyliusByrdShippingExportPlugin/actions "Build status") 
+[![](https://poser.pugx.org/bitbag/byrd-shipping-export-plugin/downloads)](https://packagist.org/packages/bitbag/byrd-shipping-export-plugin "Total Downloads") 
+[![Slack](https://img.shields.io/badge/community%20chat-slack-FF1493.svg)](http://sylius-devs.slack.com) 
+[![Support](https://img.shields.io/badge/support-contact%20author-blue])](https://bitbag.io/contact-us/?utm_source=github&utm_medium=referral&utm_campaign=plugins_byrd-shipping-export)
 
-For a comprehensive guide on Sylius Plugins development please go to Sylius documentation,
-there you will find the <a href="https://docs.sylius.com/en/latest/plugin-development-guide/index.html">Plugin Development Guide</a>, that is full of examples.
+At BitBag we do believe in open source. However, we are able to do it just because of our awesome clients, who are kind enough to share some parts of our work with the community. Therefore, if you feel like there is a possibility for us working together, feel free to reach us out. You will find out more about our professional services, technologies and contact details at [https://bitbag.io/](https://bitbag.io/contact-us/?utm_source=github&utm_medium=referral&utm_campaign=plugins_byrd-shipping-export).
 
-## Quickstart Installation
+## Table of Content
 
-1. Run `composer create-project sylius/plugin-skeleton ProjectName`.
+***
 
-2. From the plugin skeleton root directory, run the following commands:
+* [Overview](#overview)
+* [Requirements](#requirements)
+* [Support](#we-are-here-to-help)
+* [About us](#about-us)
+    * [Community](#community)
+* [Demo](#demo)
+* [License](#license)
+* [Contact](#contact)
 
-    ```bash
-    $ (cd tests/Application && yarn install)
-    $ (cd tests/Application && yarn build)
-    $ (cd tests/Application && APP_ENV=test bin/console assets:install public)
-    
-    $ (cd tests/Application && APP_ENV=test bin/console doctrine:database:create)
-    $ (cd tests/Application && APP_ENV=test bin/console doctrine:schema:create)
-    ```
+## Overview
 
-To be able to setup a plugin's database, remember to configure you database credentials in `tests/Application/.env` and `tests/Application/.env.test`.
+SyliusByrdShippingExportPlugin provides easy integration with Byrd platform. Configure once and your orders will be automatically exported to Byrd 
 
-## Usage
 
-### Running plugin tests
+- [Installation](doc/installation.md)
+- [Testing](doc/testing.md)
+- [Usage](doc/usage.md)
 
-  - PHPUnit
+## Requirements
+| Package       | Version             |
+|---------------|---------------------|
+| PHP           | \>= 7.3             |
+| Elasticsearch | \^5.3.x &#124; ^6.x |
 
-    ```bash
-    vendor/bin/phpunit
-    ```
+## We are here to help
+This **open-source plugin was developed to help the Sylius community**. If you have any additional questions, would like help with installing or configuring the plugin or need any assistance with your Sylius project - let us know!
 
-  - PHPSpec
+[![](https://bitbag.io/wp-content/uploads/2020/10/button-contact.png)](https://bitbag.io/contact-us/?utm_source=github&utm_medium=referral&utm_campaign=plugins_byrd-shipping-export)
 
-    ```bash
-    vendor/bin/phpspec run
-    ```
 
-  - Behat (non-JS scenarios)
+## Contribution
 
-    ```bash
-    vendor/bin/behat --strict --tags="~@javascript"
-    ```
+Learn more about our contribution workflow on http://docs.sylius.org/en/latest/contributing/.
 
-  - Behat (JS scenarios)
- 
-    1. [Install Symfony CLI command](https://symfony.com/download).
- 
-    2. Start Headless Chrome:
-    
-      ```bash
-      google-chrome-stable --enable-automation --disable-background-networking --no-default-browser-check --no-first-run --disable-popup-blocking --disable-default-apps --allow-insecure-localhost --disable-translate --disable-extensions --no-sandbox --enable-features=Metal --headless --remote-debugging-port=9222 --window-size=2880,1800 --proxy-server='direct://' --proxy-bypass-list='*' http://127.0.0.1
-      ```
-    
-    3. Install SSL certificates (only once needed) and run test application's webserver on `127.0.0.1:8080`:
-    
-      ```bash
-      symfony server:ca:install
-      APP_ENV=test symfony server:start --port=8080 --dir=tests/Application/public --daemon
-      ```
-    
-    4. Run Behat:
-    
-      ```bash
-      vendor/bin/behat --strict --tags="@javascript"
-      ```
-    
-  - Static Analysis
-  
-    - Psalm
-    
-      ```bash
-      vendor/bin/psalm
-      ```
-      
-    - PHPStan
-    
-      ```bash
-      vendor/bin/phpstan analyse -c phpstan.neon -l max src/  
-      ```
+# About us
 
-  - Coding Standard
-  
-    ```bash
-    vendor/bin/ecs check src
-    ```
+---
 
-### Opening Sylius with your plugin
+BitBag is an agency that provides high-quality **eCommerce and Digital Experience software**. Our main area of expertise includes eCommerce consulting and development for B2C, B2B, and Multi-vendor Marketplaces.
+The scope of our services related to Sylius includes:
+- **Consulting** in the field of strategy development
+- Personalized **headless software development**
+- **System maintenance and long-term support**
+- **Outsourcing**
+- **Plugin development**
+- **Data migration**
 
-- Using `test` environment:
+Some numbers regarding Sylius:
+* **20+ experts** including consultants, UI/UX designers, Sylius trained front-end and back-end developers,
+* **100+ projects** delivered on top of Sylius,
+* Clients from  **20+ countries**
+* **3+ years** in the Sylius ecosystem.
 
-    ```bash
-    (cd tests/Application && APP_ENV=test bin/console sylius:fixtures:load)
-    (cd tests/Application && APP_ENV=test bin/console server:run -d public)
-    ```
-    
-- Using `dev` environment:
+---
 
-    ```bash
-    (cd tests/Application && APP_ENV=dev bin/console sylius:fixtures:load)
-    (cd tests/Application && APP_ENV=dev bin/console server:run -d public)
-    ```
+If you need some help with Sylius development, don't hesitate to contact us directly. You can fill the form on [this site](https://bitbag.io/contact-us/?utm_source=github&utm_medium=referral&utm_campaign=plugins_byrd-shipping-export) or send us an e-mail to hello@bitbag.io!
+
+---
+
+[![](https://bitbag.io/wp-content/uploads/2020/10/badges-sylius.png)](https://bitbag.io/contact-us/?utm_source=github&utm_medium=referral&utm_campaign=plugins_byrd-shipping-export)
+## Community
+
+---- 
+
+For online communication, we invite you to chat with us & other users on [Sylius Slack](https://sylius-devs.slack.com/).
+
+# Demo
+
+---
+
+We created a demo app with some useful use-cases of the plugin! Visit [demo.bitbag.shop](https://demo.bitbag.shop) to take a look at it.
+The admin can be accessed under [demo.bitbag.shop/admin](https://demo.bitbag.shop/admin) link and `sylius: sylius` credentials.
+
+We also recorded a webinar which presents most of the plugin features, including how they have been implemented and specific use-cases.
+
+<div align="center">
+
+[![Webinar](https://img.youtube.com/vi/Nk8fKA48t_Y/0.jpg)](https://www.youtube.com/watch?v=Nk8fKA48t_Y)
+
+</div>
+
+**If you need an overview of this plugin, schedule a consultation with our expert.**
+
+[![](https://bitbag.io/wp-content/uploads/2020/10/button_free_consulatation-1.png)](https://bitbag.io/contact-us/?utm_source=github&utm_medium=referral&utm_campaign=plugins_byrd-shipping-export)
+
+## License
+
+---
+
+This plugin's source code is completely free and released under the terms of the MIT license.
+
+[//]: # (These are reference links used in the body of this note and get stripped out when the markdown processor does its job. There is no need to format nicely because it shouldn't be seen.)
+
+## Contact
+
+---
+If you want to contact us, the best way is to fill the form on [our website](https://bitbag.io/contact-us/?utm_source=github&utm_medium=referral&utm_campaign=plugins_byrd-shipping-export) or send us an e-mail to hello@bitbag.io with your question(s). We guarantee that we answer as soon as we can!
+
+[![](https://bitbag.io/wp-content/uploads/2020/10/footer.png)](https://bitbag.io/contact-us/?utm_source=github&utm_medium=referral&utm_campaign=plugins_byrd-shipping-export)
